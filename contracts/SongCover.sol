@@ -12,16 +12,33 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     Counters.Counter private _tokenIdCounter;
 
+    struct LastCollection {
+        uint256 start;
+        uint256 end;
+    }
+
+    mapping(address => LastCollection) public ownerLastMintedCollection;
+
     constructor() ERC721("SongCover", "SC") {}
 
     function safeMint(address to, string[] memory uris) public onlyOwner {
         uint length = uris.length;
+
+        LastCollection memory lastCollection;
+        lastCollection.start = _tokenIdCounter.current();
         for (uint i = 0; i < length; i++) {
             uint256 tokenId = _tokenIdCounter.current();
             _tokenIdCounter.increment();
             _safeMint(to, tokenId);
             _setTokenURI(tokenId, uris[i]);
         }
+        lastCollection.end = _tokenIdCounter.current() - 1;
+
+        ownerLastMintedCollection[to] = lastCollection;
+    }
+
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
     }
 
     function transferFrom(address from, address to, uint256 tokenId)
@@ -29,13 +46,9 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         override(ERC721)
     {
         require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
-        
-        // must pick a random token id from the owner's last collection.
+        // must pick a token id between 
+        // ownerLastMintedCollection[from].start - ownerLastMintedCollection[from].end
         _transfer(from, to, tokenId);
-    }
-
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-        super._burn(tokenId);
     }
 
     function tokenURI(uint256 tokenId)
