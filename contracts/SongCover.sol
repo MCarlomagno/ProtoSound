@@ -23,6 +23,9 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     constructor() ERC721("SongCover", "SC") {}
 
+    /**
+     * @dev Mints a new collection of NFTs for the artist.
+     */
     function multiMint(address to, string[] memory uris) public {
         require(msg.sender == to , "Not allowed to mint collection for someone else");
     
@@ -43,20 +46,29 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         super._burn(tokenId);
     }
 
+    /**
+    * @dev Transfers the ownership of a given token to another address.
+    */
     function transferFromArtistCollection(address from, address to, uint256 collectionId) public {
         uint256[] memory tokenIds = artistsReleases[from][collectionId];
         require(tokenIds.length > 0, "No more tokens available for this release");
 
+        // gets a random index from the release collection.
         uint256 randomNumber = _getRandomNumber();
         uint256 randomIndex = randomNumber % tokenIds.length;
         uint256 tokenId = tokenIds[randomIndex];
 
+        // checks that the receiver is approved for transfering the token.
         require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
     
         _transfer(from, to, tokenId);
         _removeArtistReleasedTokenId(from, collectionId, randomIndex);
     }
 
+    /**
+    * @dev Removes the token id from the artist collection release 
+    *      to avoid minting the same token twice.
+    */
     function _removeArtistReleasedTokenId(address owner, uint256 collectionId, uint256 index) private {
         uint256[] memory tokenIds = artistsReleases[owner][collectionId];
 
@@ -67,6 +79,9 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         artistsReleases[owner][collectionId].pop();
     }
 
+    /**
+    * @dev Requests random uint256 from a chainlink VRF oracle
+    */
     function _getRandomNumber()
         private
         view
@@ -81,6 +96,9 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         return randomWord;
     }
 
+    /**
+    * @dev returns the URI for a given token ID.
+    */
     function tokenURI(uint256 tokenId)
         public
         view
