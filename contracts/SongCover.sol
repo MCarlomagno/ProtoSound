@@ -11,43 +11,48 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
+    Counters.Counter private _collectionIdCounter;
 
-    struct LastCollection {
+    struct Collection {
         uint256 start;
         uint256 end;
     }
 
-    mapping(address => LastCollection) public ownerLastMintedCollection;
+    mapping(address => mapping(uint256 => Collection)) public ownerCollections;
 
     constructor() ERC721("SongCover", "SC") {}
 
     function safeMint(address to, string[] memory uris) public onlyOwner {
         uint length = uris.length;
 
-        LastCollection memory lastCollection;
-        lastCollection.start = _tokenIdCounter.current();
+        Collection memory collection;
+        collection.start = _tokenIdCounter.current();
+
         for (uint i = 0; i < length; i++) {
             uint256 tokenId = _tokenIdCounter.current();
             _tokenIdCounter.increment();
             _safeMint(to, tokenId);
             _setTokenURI(tokenId, uris[i]);
         }
-        lastCollection.end = _tokenIdCounter.current() - 1;
 
-        ownerLastMintedCollection[to] = lastCollection;
+        collection.end = _tokenIdCounter.current() - 1;
+        uint256 collectionId = _collectionIdCounter.current();
+        _collectionIdCounter.increment();
+
+        ownerCollections[to][collectionId] = collection;
     }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
     }
 
-    function transferFrom(address from, address to, uint256 tokenId)
+    function transfer(address from, address to, uint256 collectionId)
         public
-        override(ERC721)
     {
-        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
         // must pick a token id between 
         // ownerLastMintedCollection[from].start - ownerLastMintedCollection[from].end
+        uint256 tokenId = ownerCollections[from][collectionId].start;
+        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
         _transfer(from, to, tokenId);
     }
 
