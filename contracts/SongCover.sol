@@ -12,7 +12,7 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("SongRelease", "SONG") {}
+    constructor() ERC721("SongCover", "SC") {}
 
     function safeMint(address to, string[] memory uris) public onlyOwner {
         uint length = uris.length;
@@ -22,6 +22,16 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
             _safeMint(to, tokenId);
             _setTokenURI(tokenId, uris[i]);
         }
+    }
+
+    function transferFrom(address from, address to, uint256 tokenId)
+        public
+        override(ERC721)
+    {
+        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
+        
+        // must pick a random token id from the owner's last collection.
+        _transfer(from, to, tokenId);
     }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
