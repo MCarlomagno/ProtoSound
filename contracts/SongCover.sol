@@ -16,58 +16,55 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     Counters.Counter private _collectionIdCounter;
 
     // address of the random number oracle.
-    address _vrfConsumerAddress = 0x8aBF788e78Bf7A28DC05118346080db7BC35B200;
+    address vrfConsumerAddress = 0x8aBF788e78Bf7A28DC05118346080db7BC35B200;
 
-    struct Collection {
-        uint256 start;
-        uint256 end;
-    }
-
-    mapping(address => mapping(uint256 => Collection)) public ownerCollections;
+    // artistAddress => (collectionId => tokenIds)
+    mapping(address => mapping(uint256 => uint256[])) public artistsReleases;
 
     constructor() ERC721("SongCover", "SC") {}
 
-    function multiMint(address to, string[] memory uris) public onlyOwner {
-        uint length = uris.length;
-
-        Collection memory collection;
-        collection.start = _tokenIdCounter.current();
-        collection.end = _tokenIdCounter.current() + length - 1;
-
-        for (uint i = 0; i < length; i++) {
+    function multiMint(address to, string[] memory uris) public {
+        require(msg.sender == to , "Not allowed to mint collection for someone else");
+    
+        uint256 collectionId = _collectionIdCounter.current();
+        for (uint i = 0; i < uris.length; i++) {
             uint256 tokenId = _tokenIdCounter.current();
             _tokenIdCounter.increment();
             _safeMint(to, tokenId);
             _setTokenURI(tokenId, uris[i]);
-        }
 
-        uint256 collectionId = _collectionIdCounter.current();
+            // adds the new token to the artist collection release.
+            artistsReleases[to][collectionId].push(tokenId);
+        }
         _collectionIdCounter.increment();
-        ownerCollections[to][collectionId] = collection;
     }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
     }
 
-    function transfer(address from, address to, uint256 collectionId)
-        public
-    {
-        Collection memory currentCollection = ownerCollections[from][collectionId];
-        require(currentCollection.start < currentCollection.end, "No more NFTs available");
+    function transferFromArtistCollection(address from, address to, uint256 collectionId) public {
+        uint256[] memory tokenIds = artistsReleases[from][collectionId];
+        require(tokenIds.length > 0, "No more tokens available for this release");
 
-        bool isPair = _getRandomNumber() % 2 == 0;
+        uint256 randomNumber = _getRandomNumber();
+        uint256 randomIndex = randomNumber % tokenIds.length;
+        uint256 tokenId = tokenIds[randomIndex];
 
-        uint256 tokenId;
-        if (isPair) {
-            tokenId = currentCollection.start;
-            currentCollection.start++;
-        } else {
-            tokenId = currentCollection.end;
-            currentCollection.end--;
-        }
         require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
+    
         _transfer(from, to, tokenId);
+        _removeArtistReleasedTokenId(from, collectionId, randomIndex);
+    }
+
+    function _removeArtistReleasedTokenId(address owner, uint256 collectionId, uint256 index) private {
+        uint256[] memory tokenIds = artistsReleases[owner][collectionId];
+
+        // replaces the index to delete by the 
+        // last element and pops the array.
+        tokenIds[index] = tokenIds[tokenIds.length - 1];
+        artistsReleases[owner][collectionId] = tokenIds;
+        artistsReleases[owner][collectionId].pop();
     }
 
     function _getRandomNumber()
@@ -75,7 +72,7 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         view
         returns(uint256)
     {
-        VRFv2Consumer vrfConsumerContract = VRFv2Consumer(_vrfConsumerAddress);
+        VRFv2Consumer vrfConsumerContract = VRFv2Consumer(vrfConsumerAddress);
         uint256 lastReqId = vrfConsumerContract.lastRequestId();
         (bool success, uint256 randomWord) = vrfConsumerContract.getRequestStatus(lastReqId);
         if (!success) {
