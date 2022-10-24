@@ -21,6 +21,8 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     // artistAddress => (collectionId => tokenIds)
     mapping(address => mapping(uint256 => uint256[])) public artistsReleases;
 
+    event CollectionReleased(address owner, uint256 collectionId, uint256[] tokenIds);
+
     constructor() ERC721("SongCover", "SC") {}
 
     /**
@@ -40,6 +42,7 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
             artistsReleases[to][collectionId].push(tokenId);
         }
         _collectionIdCounter.increment();
+        emit CollectionReleased(to, collectionId, artistsReleases[to][collectionId]);
     }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
