@@ -1,4 +1,4 @@
-# Chainlink Hackatoon
+# ProtoSound
 
 ## Running this project
 
