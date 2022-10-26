@@ -13,7 +13,7 @@ describe("ProtoSound", function () {
 
   // test case: 
   // 1. create a ProtoSound instance
-  // 2. call the transferSongCover() method from address2
+  // 2. call the transferSongCover() method from address2 sending 0.001 matic
   // 4. check SongAuthorCover token transferred.
-  // 5. check transfer event emitted.
+  // 5. check receiver balances updated with +0.001 matic.
 });
