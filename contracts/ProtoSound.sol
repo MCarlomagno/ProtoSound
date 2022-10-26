@@ -24,21 +24,20 @@ contract ProtoSound is Ownable {
         bool active;
     }
 
-    constructor(
-        address _songCoverAddress,
-        address _songAuthorCoverAddress,
-        address _songAuthorAudioAddress
-    ) {
-        songCoverAddress = _songCoverAddress;
-        songAuthorCoverAddress = _songAuthorCoverAddress;
-        songAuthorAudioAddress = _songAuthorAudioAddress;
+    constructor() {
+        SongCover songCover = new SongCover();
+        songCoverAddress = address(songCover);
+
+        SongAuthorCover songAuthorCover = new SongAuthorCover();
+        songAuthorCoverAddress = address(songAuthorCover);
+
+        SongAudio songAudio = new SongAudio();
+        songAuthorAudioAddress = address(songAudio);
     }
 
-    function create(address _address,string memory _nick) public onlyOwner {
+    function create(address _address, string memory _nick) public onlyOwner {
         users[_address].nick = _nick;
         users[_address].active = true;
-        SongCover songCover = SongCover(songCoverAddress);
-        songCover.setApprovalForAll(address(this), true);
     }
 
     function changeNick(address _address, string memory _nick) public onlyOwner {
