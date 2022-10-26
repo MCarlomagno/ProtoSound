@@ -76,9 +76,6 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     
         _transfer(from, to, tokenId);
         _removeArtistReleasedTokenId(from, collectionId, randomIndex);
-
-        // requests a new random number to refresh the oracle.
-        _requestRandomNumber();
     }
 
     /**

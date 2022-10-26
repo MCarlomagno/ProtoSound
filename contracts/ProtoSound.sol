@@ -9,18 +9,19 @@ import "./SongAudio.sol";
 contract ProtoSound is Ownable {
 
     // address of the SongCover NFT token.
-    address songCoverAddress;
+    address public songCoverAddress;
 
     // address of the soulbound cover.
-    address songAuthorCoverAddress;
+    address public songAuthorCoverAddress;
 
-    // address of the soulbound audio.
-    address songAuthorAudioAddress;
+    // address of the soulbound audio
+    address public songAuthorAudioAddress;
 
     mapping(address => User) public users;
 
     struct User {
         string nick;
+        bool active;
     }
 
     constructor(
@@ -34,15 +35,15 @@ contract ProtoSound is Ownable {
     }
 
     function create(address _address,string memory _nick) public onlyOwner {
-        User memory user;
-        user.nick = _nick;
-        users[_address] = user;
+        users[_address].nick = _nick;
+        users[_address].active = true;
+        SongCover songCover = SongCover(songCoverAddress);
+        songCover.setApprovalForAll(address(this), true);
     }
 
     function changeNick(address _address, string memory _nick) public onlyOwner {
-        User memory user = users[_address];
-        user.nick = _nick;
-        users[_address] = user;
+        require(users[_address].active, "User not found");
+        users[_address].nick = _nick;
     }
 
     function mintSong(
@@ -51,6 +52,7 @@ contract ProtoSound is Ownable {
         string memory audioUri,
         string[] memory tokenUris
     ) public {
+        require(users[msg.sender].active, "User not found");
         SongCover songCover = SongCover(songCoverAddress);
         SongAuthorCover songAuthorCover = SongAuthorCover(songAuthorCoverAddress);
         SongAudio songAudio = SongAudio(songAuthorAudioAddress);
@@ -60,16 +62,30 @@ contract ProtoSound is Ownable {
         songCover.multiMint(msg.sender, price, tokenUris);
     }
 
-    function transferSongCover(address payable from, uint256 collectionId) public payable {
+    function transferSongCover(address payable artist, uint256 collectionId) public payable {
+        require(users[artist].active, "Artist not found");
         SongCover songCover = SongCover(songCoverAddress);
-        uint256 price = songCover.collectionPrice(from, collectionId);
+        uint256 price = songCover.collectionPrice(artist, collectionId);
+
         require(msg.value >= price, "Must send a value equal or greater to the price of the token");
 
         // transfers the ownership of the token to the buyer.
-        songCover.transferFromArtistCollection(from, msg.sender, collectionId);
+        songCover.transferFromArtistCollection(artist, msg.sender, collectionId);
 
         // transfers the price of the token to the artist.
-        (bool sent,) = from.call{value: price}("");
+        (bool sent,) = artist.call{value: price}("");
         require(sent, "Failed to send transaction");
+    }
+
+    function updateSongCoverAddress(address _address) public onlyOwner {
+        songCoverAddress = _address;
+    }
+
+    function updateSongAuthorCoverAddress(address _address) public onlyOwner {
+        songAuthorCoverAddress = _address;
+    }
+
+    function updateSongAuthorAudioAddress(address _address) public onlyOwner {
+        songAuthorAudioAddress = _address;
     }
 }
