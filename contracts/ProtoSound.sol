@@ -17,7 +17,7 @@ contract ProtoSound is Ownable {
     // address of the soulbound audio.
     address songAuthorAudioAddress;
 
-    mapping(address => User) users;
+    mapping(address => User) public users;
 
     struct User {
         string nick;
@@ -69,7 +69,7 @@ contract ProtoSound is Ownable {
         songCover.transferFromArtistCollection(from, msg.sender, collectionId);
 
         // transfers the price of the token to the artist.
-        (bool sent, bytes memory data) = from.call{value: price}("");
+        (bool sent,) = from.call{value: price}("");
         require(sent, "Failed to send transaction");
     }
 }

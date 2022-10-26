@@ -1,18 +1,12 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
-
-  const lockedAmount = ethers.utils.parseEther("1");
-
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
-
-  console.log(`Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`);
+  /**
+   * 1. Deploy VRFConsumer contract to address 0x8aBF788e78Bf7A28DC05118346080db7BC35B200. Must be barcoded due to the chainlink configuration.
+   * 2. Deploy SongAudio, SongAuthorCover and SongCover contracts.
+   * 3. Taking the 3 previous deployed addresses, deploy ProtoSound contract sending the addresses by parameter.
+   * 4. Change the ownership of the SongAudio, SongAuthorCover and SongCover contracts to ProtoSound address.
+   */
 }
 
 // We recommend this pattern to be able to use async/await everywhere
