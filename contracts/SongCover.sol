@@ -34,8 +34,6 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
      * @dev Mints a new collection of NFTs for the artist.
      */
     function multiMint(address to, uint256 price, string[] memory uris) public {
-        require(msg.sender == to , "Not allowed to mint collection for someone else");
-    
         uint256 collectionId = _collectionIdCounter.current();
         artistsReleases[to][collectionId].price = price;
 
