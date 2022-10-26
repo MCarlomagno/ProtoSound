@@ -1,5 +1,5 @@
 describe("SongAudio", function () {
-  // test case: 
+  // test case:
   // 1. create a SongAudio instance
   // 2. call safeMint() method passing a valid address and uri
   // 3. call ownerOf() method passing 0 as token id
