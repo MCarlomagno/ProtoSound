@@ -1,4 +1,4 @@
-# ProtoSound
+# ProtoSound 🎵
 
 ## Running this project
 
@@ -14,3 +14,14 @@ Compile contracts
 yarn hardhat compile
 ```
 
+Add your private key opening `.env` or creating one
+
+```shell
+PRIVATE_KEY='...'
+```
+
+Deploy contracts to default network (Polygon Mumbai)
+
+```shell
+yarn hardhat run scripts/deploy.ts 
+```
