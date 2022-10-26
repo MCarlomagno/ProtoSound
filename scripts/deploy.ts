@@ -9,9 +9,17 @@ async function main() {
   const protoSound = await ProtoSound.deploy();
   await protoSound.deployed();
 
+  // TODO: add tokens addresses.
+  const songCoverAddress = await protoSound.songCoverAddress();
+  const songAuthorCoverAddress = await protoSound.songAuthorCoverAddress();
+  const songAuthorAudioAddress = await protoSound.songAuthorAudioAddress();
+
   console.table({
     vrfV2ConsumerAddress: vrfV2Consumer.address,
     protoSoundAddress: protoSound.address,
+    songCoverAddress,
+    songAuthorCoverAddress,
+    songAuthorAudioAddress
   });
 }
 
