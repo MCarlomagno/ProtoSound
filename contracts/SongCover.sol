@@ -18,20 +18,27 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     // address of the random number oracle.
     address vrfConsumerAddress = 0x8aBF788e78Bf7A28DC05118346080db7BC35B200;
 
-    // artistAddress => (collectionId => tokenIds)
-    mapping(address => mapping(uint256 => uint256[])) public artistsReleases;
+    // artistAddress => (collectionId => Collection)
+    mapping(address => mapping(uint256 => Collection)) public artistsReleases;
 
-    event CollectionReleased(address owner, uint256 collectionId, uint256[] tokenIds);
+    struct Collection {
+        uint256 price;
+        uint256[] tokenIds;
+    }
+
+    event CollectionReleased(address owner, uint256 collectionId, uint256 price, uint256[] tokenIds);
 
     constructor() ERC721("SongCover", "SC") {}
 
     /**
      * @dev Mints a new collection of NFTs for the artist.
      */
-    function multiMint(address to, string[] memory uris) public {
+    function multiMint(address to, uint256 price, string[] memory uris) public {
         require(msg.sender == to , "Not allowed to mint collection for someone else");
     
         uint256 collectionId = _collectionIdCounter.current();
+        artistsReleases[to][collectionId].price = price;
+
         for (uint i = 0; i < uris.length; i++) {
             uint256 tokenId = _tokenIdCounter.current();
             _tokenIdCounter.increment();
@@ -39,10 +46,15 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
             _setTokenURI(tokenId, uris[i]);
 
             // adds the new token to the artist collection release.
-            artistsReleases[to][collectionId].push(tokenId);
+            artistsReleases[to][collectionId].tokenIds.push(tokenId);
         }
         _collectionIdCounter.increment();
-        emit CollectionReleased(to, collectionId, artistsReleases[to][collectionId]);
+        emit CollectionReleased(
+            to,
+            collectionId,
+            artistsReleases[to][collectionId].price,
+            artistsReleases[to][collectionId].tokenIds
+        );
     }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
@@ -53,7 +65,7 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     * @dev Transfers the ownership of a given token to another address.
     */
     function transferFromArtistCollection(address from, address to, uint256 collectionId) public {
-        uint256[] memory tokenIds = artistsReleases[from][collectionId];
+        uint256[] memory tokenIds = artistsReleases[from][collectionId].tokenIds;
         require(tokenIds.length > 0, "No more tokens available for this release");
 
         // gets a random index from the release collection.
@@ -66,6 +78,9 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     
         _transfer(from, to, tokenId);
         _removeArtistReleasedTokenId(from, collectionId, randomIndex);
+
+        // requests a new random number to refresh the oracle.
+        _requestRandomNumber();
     }
 
     /**
@@ -73,17 +88,17 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     *      to avoid minting the same token twice.
     */
     function _removeArtistReleasedTokenId(address owner, uint256 collectionId, uint256 index) private {
-        uint256[] memory tokenIds = artistsReleases[owner][collectionId];
+        uint256[] memory tokenIds = artistsReleases[owner][collectionId].tokenIds;
 
         // replaces the index to delete by the 
         // last element and pops the array.
         tokenIds[index] = tokenIds[tokenIds.length - 1];
-        artistsReleases[owner][collectionId] = tokenIds;
-        artistsReleases[owner][collectionId].pop();
+        artistsReleases[owner][collectionId].tokenIds = tokenIds;
+        artistsReleases[owner][collectionId].tokenIds.pop();
     }
 
     /**
-    * @dev Requests random uint256 from a chainlink VRF oracle
+    * @dev Gets last random uint256 from a chainlink VRF oracle
     */
     function _getRandomNumber()
         private
@@ -100,6 +115,14 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     }
 
     /**
+    * @dev Requests a new random uint256 to chainlink VRF oracle
+    */
+    function _requestRandomNumber() private {
+        VRFv2Consumer vrfConsumerContract = VRFv2Consumer(vrfConsumerAddress);
+        vrfConsumerContract.requestRandomWords();
+    }
+
+    /**
     * @dev returns the URI for a given token ID.
     */
     function tokenURI(uint256 tokenId)
@@ -109,5 +132,16 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         returns (string memory)
     {
         return super.tokenURI(tokenId);
+    }
+
+    /**
+    * @dev returns the price for the collectionId
+    */
+    function collectionPrice(address owner, uint256 collectionId)
+        public
+        view
+        returns(uint256 price)
+    {
+        return artistsReleases[owner][collectionId].price;
     }
 }
