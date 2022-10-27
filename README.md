@@ -32,6 +32,8 @@ HARDHAT_ACCOUNT3='...'
 # For running tests
 AUDIO_URI='https://...'
 IMAGE_URI1='https://...'
+IMAGE_URI2='https://...'
+IMAGE_URI3='https://...'
 
 # For testing on Polygon Mumbai
 MATIC_ACCOUNT1='...'

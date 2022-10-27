@@ -16,7 +16,8 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     Counters.Counter private _collectionIdCounter;
 
     // address of the random number oracle.
-    address vrfConsumerAddress = 0x8aBF788e78Bf7A28DC05118346080db7BC35B200;
+    // In Polygon Mumbai 0x8aBF788e78Bf7A28DC05118346080db7BC35B200
+    address vrfConsumerAddress ;
 
     // artistAddress => (collectionId => Collection)
     mapping(address => mapping(uint256 => Collection)) public artistsReleases;
@@ -28,7 +29,9 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     event CollectionReleased(address owner, uint256 collectionId, uint256 price, uint256[] tokenIds);
 
-    constructor() ERC721("SongCover", "SC") {}
+    constructor(address _vrfConsumerAddress) ERC721("SongCover", "SC") {
+        vrfConsumerAddress = _vrfConsumerAddress;
+    }
 
     /**
      * @dev Mints a new collection of NFTs for the artist.

@@ -24,8 +24,8 @@ contract ProtoSound is Ownable {
         bool active;
     }
 
-    constructor() {
-        SongCover songCover = new SongCover();
+    constructor(address _vrfConsumerAddress) {
+        SongCover songCover = new SongCover(_vrfConsumerAddress);
         songCoverAddress = address(songCover);
 
         SongAuthorCover songAuthorCover = new SongAuthorCover();
