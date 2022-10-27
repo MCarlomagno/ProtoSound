@@ -62,4 +62,30 @@ describe("SongCover", function () {
     const ownerOfFirstTokenId = await songCover.ownerOf(0);
     expect(ownerOfFirstTokenId).to.be.equal(acc3.address);
   });
+
+  it('should transfer a random token from collection', async () => {
+    const [acc1, acc2, acc3] = await ethers.getSigners();
+
+    // acc1 represents the
+    // contract that acts on behalf of users.
+    // The user (acc2) must approve the contract to use its tokens.
+    songCover = songCover.connect(acc2);
+    const tx: ContractTransaction = await songCover.setApprovalForAll(acc1.address, true);
+    await tx.wait();
+
+    // mints 3 tokens.
+    songCover = songCover.connect(acc1);
+    const tx2: ContractTransaction = await songCover.multiMint(acc2.address, 1, imageUris);
+    await tx2.wait();
+
+    // transfers all the 3 tokens.
+    await songCover.transferFromArtistCollection(acc2.address, acc3.address, 0);
+    await songCover.transferFromArtistCollection(acc2.address, acc1.address, 0);
+    const tx5: ContractTransaction = await songCover.transferFromArtistCollection(acc2.address, acc3.address, 0);
+    await tx5.wait();
+
+    // shuld throw on the next attempt, no more tokens available.
+    const transactionToFail: Promise<ContractTransaction> = songCover.transferFromArtistCollection(acc2.address, acc3.address, 0);
+    await expect(transactionToFail).to.be.rejectedWith('No more tokens available for this release');
+  });
 });
