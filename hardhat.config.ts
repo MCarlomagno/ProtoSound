@@ -5,16 +5,16 @@ import "@nomicfoundation/hardhat-toolbox";
 dotenv.config();
 
 const config: HardhatUserConfig = {
-  defaultNetwork: "matic",
+  defaultNetwork: "hardhat",
   networks: {
     hardhat: {
     },
     matic: {
       url: "https://rpc-mumbai.maticvigil.com",
       accounts: [
-        process.env.ACCOUNT1 as string,
-        process.env.ACCOUNT2 as string,
-        process.env.ACCOUNT3 as string
+        process.env.MATIC_ACCOUNT1 as string,
+        process.env.MATIC_ACCOUNT2 as string,
+        process.env.MATIC_ACCOUNT3 as string
       ]
     }
   },

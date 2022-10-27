@@ -12,7 +12,6 @@ describe("SongAuthorCover", function () {
     const SongAuthorCover = await ethers.getContractFactory("SongAuthorCover");
     songAuthorCover = await SongAuthorCover.deploy();
     await songAuthorCover.deployed();
-    console.log("song author cover deployed to address", songAuthorCover.address);
   });
 
   it("should mint a SongAuthorCover token", async () => {
@@ -23,5 +22,14 @@ describe("SongAuthorCover", function () {
     const tokenUri: string = await songAuthorCover.tokenURI('0');
     expect(owner).to.equal(acc2.address);
     expect(tokenUri).to.equal(uri);
+  });
+
+  it("should throw when trying to transfer (Soulbound)", async () => {
+    const [acc1, acc2, acc3] = await ethers.getSigners();
+    songAuthorCover.connect(acc1);
+    let tx: ContractTransaction = await songAuthorCover.safeMint(acc1.address, uri);
+    await tx.wait();
+    let tx2: Promise<ContractTransaction> = songAuthorCover.transferFrom(acc1.address, acc2.address, 0);
+    await expect(tx2).to.be.revertedWith('Soulbound tokens cannot be transferred');
   });
 });
