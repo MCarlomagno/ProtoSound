@@ -11,7 +11,11 @@ const config: HardhatUserConfig = {
     },
     matic: {
       url: "https://rpc-mumbai.maticvigil.com",
-      accounts: [process.env.PRIVATE_KEY as string]
+      accounts: [
+        process.env.ACCOUNT1 as string,
+        process.env.ACCOUNT2 as string,
+        process.env.ACCOUNT3 as string
+      ]
     }
   },
   solidity: "0.8.17",

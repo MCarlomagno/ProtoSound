@@ -11,6 +11,8 @@ contract SongAudio is ERC721, ERC721URIStorage, Ownable {
 
     Counters.Counter private _tokenIdCounter;
 
+    event Mint(address to, string uri, uint256 id);
+
     constructor() ERC721("SongAudio", "SA") {}
 
     function safeMint(address to, string memory uri) public onlyOwner {
@@ -18,6 +20,7 @@ contract SongAudio is ERC721, ERC721URIStorage, Ownable {
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
+        emit Mint(to, uri, tokenId);
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)

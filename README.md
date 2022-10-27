@@ -14,10 +14,12 @@ Compile contracts
 yarn hardhat compile
 ```
 
-Add your private key opening `.env` or creating one
+Add your account private keys opening `.env` or creating one
 
 ```shell
-PRIVATE_KEY='...'
+ACCOUNT1='...'
+ACCOUNT2='...'
+ACCOUNT3='...'
 ```
 
 Deploy contracts to default network (Polygon Mumbai)
