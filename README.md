@@ -22,7 +22,7 @@ Run local hardhat node
 yarn hardhat node
 ```
 
-Add your account private keys opening `.env` or creating one
+Add your account private keys and token URIs opening `.env` or creating one
 
 ```shell
 HARDHAT_ACCOUNT1='...'
@@ -41,11 +41,17 @@ MATIC_ACCOUNT2='...'
 MATIC_ACCOUNT3='...'
 ```
 
-Run tests, by default runs in local hardhat node, but optionally you can run them in **Polygon Mumbai**
-
+Run tests, by default runs in local hardhat node
 
 ```shell
-yarn hardhat test [--network matic]
+yarn hardhat test
+```
+
+Optionally you can run them in **Polygon Mumbai**
+> :warning: It might take several minutes to run all the tests.
+
+```shell
+yarn hardhat test --network matic
 ```
 
 ### Deployment
