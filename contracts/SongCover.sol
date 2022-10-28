@@ -142,4 +142,13 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     {
         return artistsReleases[owner][collectionId].price;
     }
+
+    function release(address _address, uint256 _collectionId)
+        public
+        view
+        returns(uint256 price, uint256[] memory tokenIds)
+    {   
+        Collection memory collection = artistsReleases[_address][_collectionId];
+        return (collection.price, collection.tokenIds);
+    }
 }

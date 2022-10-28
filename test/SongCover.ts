@@ -17,6 +17,7 @@ describe("SongCover", function () {
   beforeEach(async function () {
     const VRFv2ConsumerMock = await ethers.getContractFactory("VRFv2ConsumerMock");
     const vrfV2ConsumerMock = await VRFv2ConsumerMock.deploy();
+    await vrfV2ConsumerMock.deployed();
     const SongCover = await ethers.getContractFactory("SongCover");
     songCover = await SongCover.deploy(vrfV2ConsumerMock.address);
     await songCover.deployed();

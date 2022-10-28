@@ -87,4 +87,12 @@ contract ProtoSound is Ownable {
     function updateSongAuthorAudioAddress(address _address) public onlyOwner {
         songAuthorAudioAddress = _address;
     }
+
+    function userByAddress(address _address)
+        public
+        view
+        returns(string memory nick, bool active)
+    {
+        return (users[_address].nick, users[_address].active);
+    }
 }
