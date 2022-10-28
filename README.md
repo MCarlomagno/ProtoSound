@@ -71,7 +71,7 @@ yarn hardhat run scripts/deploy.ts --network matic
 ### How it works?
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/MCarlomagno/ProtoSound/main/public/docs/contracts.png" alt="Contracts"/>
+<img src="https://raw.githubusercontent.com/MCarlomagno/ProtoSound/main/docs/contracts.png" alt="Contracts"/>
 </div>
 
 The `ProtoSound` contract allows users to create songs setting a price and minting 3 types of tokens, an `AuthorSongCover` Soulbound token, an `AuthorSongAudio` Soulbound token, and a collection of `SongCover` NFT tokens. 
