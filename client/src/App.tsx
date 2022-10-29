@@ -1,16 +1,12 @@
 import './App.css';
-import { useRef, useState } from 'react';
-import * as IPFS from 'ipfs';
-
-// IPFS node should be instantiated a single time for a repo
-let ipfs: IPFS.IPFS | undefined;
-IPFS.create().then(((ipfsInstance: any) => ipfs = ipfsInstance))
+import { useCallback, useRef, useState } from 'react';
+import { useIPFS } from './hooks/useIPFS';
 
 function App() {
   const [cid, setCid] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const file = useRef<File>();
-
+  const ipfs = useIPFS();
 
   const handleOnChange = (files: FileList | null) => {
     if (!files) return;
@@ -18,14 +14,14 @@ function App() {
     file.current = files[0];
   };
 
-  const submit = async () => {
+  const submit = useCallback(async () => {
     if (!file.current || !ipfs) return;
     setLoading(true);
     const result = await ipfs.add(file.current);
     setLoading(false);
     setCid(result.cid.toString());
     console.log('done!');
-  };
+  }, [file.current, ipfs] );
 
   return (
     <div className="App">
