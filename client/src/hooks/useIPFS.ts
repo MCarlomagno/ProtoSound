@@ -1,5 +1,6 @@
 import * as IPFS from 'ipfs';
 import { useCallback, useEffect, useState } from 'react';
+import { FileMetadata } from '../types/FileMetadata';
 
 // we use singleton pattern to prevent
 // instantiating multiple nodes from the same client.
@@ -53,17 +54,18 @@ export function useIPFS() {
   const uploadFiles = useCallback(async (
     files: FileList,
     progress = (p: number) => {}
-  ) => {
+  ) : Promise<FileMetadata[]> => {
     if (!ipfs || !ready) throw Error('IPFS not ready');
-    const metadata = [];
+
+    const metadata: FileMetadata[] = [];
     for (let f of files) {
       const chunks = await uploadSingleFile(f);
       if (chunks && chunks[0]) {
-        const fileMetadata = {
+        const fileMetadata: FileMetadata = {
           name: f.name,
           type: f.type,
           size: f.size,
-          cid: chunks[0].cid,
+          cid: chunks[0].cid.toString(),
           path: chunks[0].path,
           url: `https://ipfs.io/ipfs/${chunks[0].path}`
         };
