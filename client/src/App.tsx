@@ -1,40 +1,28 @@
 import './App.css';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useIPFS } from './hooks/useIPFS';
 
 function App() {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const files = useRef<FileList>();
-  const ipfs = useIPFS();
+  const { ready, uploadFiles } = useIPFS();
+
+  // loading until IPFS is ready
+  useEffect(() => {
+    setLoading(!ready);
+  }, [ready]);
 
   const handleOnChange = useCallback((fileList: FileList | null) => {
     if (!fileList) return;
     files.current = fileList;
   }, []);
 
-  const uploadFile = useCallback(async (file: File) => {
-    if (!ipfs) return;
-    const chunks = [];
-    const result = ipfs.addAll(file.stream(), {
-      preload: true,
-    });
-    for await (const chunk of result) {
-      chunks.push(chunk);
-    }
-    return chunks;
-  }, [ipfs] );
-
   const submit = useCallback(async () => {
-    if (!files.current || !ipfs) return;
+    if (!files.current) return;
     setLoading(true);
-    for (let f of files.current) {
-      const chunks = await uploadFile(f);
-      if (chunks && chunks[0]) {
-        console.log('Upload result', `https://ipfs.io/ipfs/${chunks[0].path}`)
-      }
-    }
+    await uploadFiles(files.current);
     setLoading(false);
-  }, [files, ipfs] );
+  }, [files, uploadFiles]);
 
   return (
     <div className="App">

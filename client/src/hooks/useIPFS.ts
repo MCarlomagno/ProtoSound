@@ -1,5 +1,5 @@
 import * as IPFS from 'ipfs';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // we use singleton pattern to prevent
 // instantiating multiple nodes from the same client.
@@ -24,12 +24,55 @@ class IPFSNode {
 }
 
 export function useIPFS() {
+  const [ready, setReady] = useState<boolean>();
   const [ipfs, setIpfs] = useState<IPFS.IPFS>();
 
   useEffect(() => {
+    setReady(false);
     IPFSNode.getInstance()
-      .then((ipfs) => setIpfs(ipfs.node));
-  }, [IPFSNode]);
+      .then((instance) => {
+        if (instance && instance.node) {
+          setIpfs(instance.node);
+          setReady(true);
+        }
+      });
+  }, []);
 
-  return ipfs;
+  const uploadSingleFile = async (file: File) => {
+    if (!ipfs) return;
+    const chunks = [];
+    const result = ipfs.addAll(file.stream(), {
+      preload: true,
+    });
+    for await (const chunk of result) {
+      chunks.push(chunk);
+    }
+    return chunks;
+  }
+
+  const uploadFiles = useCallback(async (
+    files: FileList,
+    progress = (p: number) => {}
+  ) => {
+    if (!ipfs || !ready) throw Error('IPFS not ready');
+    const metadata = [];
+    for (let f of files) {
+      const chunks = await uploadSingleFile(f);
+      if (chunks && chunks[0]) {
+        const fileMetadata = {
+          name: f.name,
+          type: f.type,
+          size: f.size,
+          cid: chunks[0].cid,
+          path: chunks[0].path,
+          url: `https://ipfs.io/ipfs/${chunks[0].path}`
+        };
+        metadata.push(fileMetadata);
+        progress((metadata.length / files.length) * 100)
+      }
+    }
+    return metadata;
+  }, [ipfs, ready] );
+
+  return {ipfs, ready, uploadFiles };
 }
