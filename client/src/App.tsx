@@ -3,16 +3,14 @@ import { useCallback, useRef, useState } from 'react';
 import { useIPFS } from './hooks/useIPFS';
 
 function App() {
-  const [path, setPath] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const file = useRef<File>();
+  const files = useRef<FileList>();
   const ipfs = useIPFS();
 
-  const handleSingleOnChange = (files: FileList | null) => {
-    if (!files) return;
-    console.log(files[0]);
-    file.current = files[0];
-  };
+  const handleOnChange = useCallback((fileList: FileList | null) => {
+    if (!fileList) return;
+    files.current = fileList;
+  }, []);
 
   const uploadFile = useCallback(async (file: File) => {
     if (!ipfs) return;
@@ -27,49 +25,23 @@ function App() {
   }, [ipfs] );
 
   const submit = useCallback(async () => {
-    if (!file.current || !ipfs) return;
+    if (!files.current || !ipfs) return;
     setLoading(true);
-    const chunks = await uploadFile(file.current);
-    if (chunks && chunks[0]) {
-      setPath(chunks[0].path);
-    } 
-    setLoading(false);
-  }, [file.current, ipfs] );
-
-  const [loadingMulti, setLoadingMulti] = useState<boolean>(false);
-  const filesRef = useRef<FileList>();
-
-  const handleMultipleOnChange = (files: FileList | null) => {
-    if (!files) return;
-    filesRef.current = files;
-  };
-
-  const submitMulti = useCallback(async () => {
-    if (!filesRef.current || !ipfs) return;
-    setLoadingMulti(true);
-    for (let f of filesRef.current) {
+    for (let f of files.current) {
       const chunks = await uploadFile(f);
       if (chunks && chunks[0]) {
-        console.log('upload result', `https://ipfs.io/ipfs/${chunks[0].path}`)
+        console.log('Upload result', `https://ipfs.io/ipfs/${chunks[0].path}`)
       }
-      console.log('file uploaded', f.name);
     }
-
-    setLoadingMulti(false);
-  }, [file.current, ipfs] );
+    setLoading(false);
+  }, [files, ipfs] );
 
   return (
     <div className="App">
-      <h1>IPFS single Upload</h1>
-      <input type="file" onChange={(e) => handleSingleOnChange(e.target.files)} />
+      <h1>IPFS Uploader</h1>
+      <input type="file" onChange={(e) => handleOnChange(e.target.files)} multiple/>
       <button onClick={submit}>Upload</button>
       {loading && <div>Loading...</div>}
-      {!loading && path && <div>your IPFS url is: https://ipfs.io/ipfs/{path}</div>}
-
-      <h1>IPFS multiple Upload</h1>
-      <input type="file" multiple onChange={(e) => handleMultipleOnChange(e.target.files)} />
-      <button onClick={submitMulti}>Upload</button>
-      {loadingMulti && <div>Loading...</div>}
     </div>
   )
 }
