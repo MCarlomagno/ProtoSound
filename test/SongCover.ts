@@ -6,14 +6,16 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const imageUris = [
-  process.env.IMAGE_URI1,
-  process.env.IMAGE_URI2,
-  process.env.IMAGE_URI3,
-] as string[];
+
 
 describe("SongCover", function () {
   let songCover: SongCover;
+  const imageUris = [
+    process.env.IMAGE_URI1,
+    process.env.IMAGE_URI2,
+    process.env.IMAGE_URI3,
+  ] as string[];
+  
   beforeEach(async function () {
     const VRFv2ConsumerMock = await ethers.getContractFactory("VRFv2ConsumerMock");
     const vrfV2ConsumerMock = await VRFv2ConsumerMock.deploy();

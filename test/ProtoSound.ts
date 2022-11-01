@@ -6,19 +6,19 @@ import dotenv from 'dotenv';
 
 dotenv.config()
 
-const authorCoverUri: string = process.env.IMAGE_URI1 as string;
-const audioUri: string = process.env.AUDIO_URI as string;
-const tokenUris: string[] = [
-  process.env.IMAGE_URI1,
-  process.env.IMAGE_URI2,
-  process.env.IMAGE_URI3
-] as string[];
-
 describe("ProtoSound", function () {
   var protoSound: ProtoSound;
   var songCover: SongCover;
   var songAudio: SongAudio;
   var songAuthorCover: SongAuthorCover;
+
+  const authorCoverUri: string = process.env.IMAGE_URI1 as string;
+  const audioUri: string = process.env.AUDIO_URI as string;
+  const tokenUris: string[] = [
+    process.env.IMAGE_URI1,
+    process.env.IMAGE_URI2,
+    process.env.IMAGE_URI3
+  ] as string[];
 
   beforeEach(async () => {
     // instances the VRFConsumer mock contract
