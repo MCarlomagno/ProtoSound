@@ -8,22 +8,22 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
-    steps:v
+    steps:
       - uses: actions/checkout@v3
       - name: create env file
-          run: |
-            touch .env
-            echo MATIC_ACCOUNT1=${{ secrets.MATIC_ACCOUNT1 }} >> .env
-            echo MATIC_ACCOUNT2=${{ secrets.MATIC_ACCOUNT2 }} >> .env
-            echo MATIC_ACCOUNT3=${{ secrets.MATIC_ACCOUNT3 }} >> .env
-            echo HARDHAT_ACCOUNT1=${{ secrets.HARDHAT_ACCOUNT1 }} >> .env
-            echo HARDHAT_ACCOUNT2=${{ secrets.HARDHAT_ACCOUNT2 }} >> .env
-            echo HARDHAT_ACCOUNT3=${{ secrets.HARDHAT_ACCOUNT3 }} >> .env
-            echo AUDIO_URI=${{ secrets.AUDIO_URI }} >> .env
-            echo IMAGE_URI1=${{ secrets.IMAGE_URI1 }} >> .env
-            echo IMAGE_URI2=${{ secrets.IMAGE_URI2 }} >> .env
-            echo IMAGE_URI3=${{ secrets.IMAGE_URI3 }} >> .env
-            echo NET=${{ secrets.NET }} >> .en
+        run: |
+          touch .env
+          echo MATIC_ACCOUNT1=${{ secrets.MATIC_ACCOUNT1 }} >> .env
+          echo MATIC_ACCOUNT2=${{ secrets.MATIC_ACCOUNT2 }} >> .env
+          echo MATIC_ACCOUNT3=${{ secrets.MATIC_ACCOUNT3 }} >> .env
+          echo HARDHAT_ACCOUNT1=${{ secrets.HARDHAT_ACCOUNT1 }} >> .env
+          echo HARDHAT_ACCOUNT2=${{ secrets.HARDHAT_ACCOUNT2 }} >> .env
+          echo HARDHAT_ACCOUNT3=${{ secrets.HARDHAT_ACCOUNT3 }} >> .env
+          echo AUDIO_URI=${{ secrets.AUDIO_URI }} >> .env
+          echo IMAGE_URI1=${{ secrets.IMAGE_URI1 }} >> .env
+          echo IMAGE_URI2=${{ secrets.IMAGE_URI2 }} >> .env
+          echo IMAGE_URI3=${{ secrets.IMAGE_URI3 }} >> .env
+          echo NET=${{ secrets.NET }} >> .en
       - name: Install packages
         uses: actions/setup-node@v3
         with:
