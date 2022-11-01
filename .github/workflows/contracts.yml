@@ -1,6 +1,16 @@
 name: CI contracts tests
 env:
-  DOTENV_CONFIG_PATH: "./.env"
+  MATIC_ACCOUNT1: ${{ secrets.MATIC_ACCOUNT1 }}
+  MATIC_ACCOUNT2: ${{ secrets.MATIC_ACCOUNT2 }}
+  MATIC_ACCOUNT3: ${{ secrets.MATIC_ACCOUNT3 }}
+  HARDHAT_ACCOUNT1: ${{ secrets.HARDHAT_ACCOUNT1 }}
+  HARDHAT_ACCOUNT2: ${{ secrets.HARDHAT_ACCOUNT2 }}
+  HARDHAT_ACCOUNT3: ${{ secrets.HARDHAT_ACCOUNT3 }}
+  AUDIO_URI: ${{ secrets.AUDIO_URI }}
+  IMAGE_URI1: ${{ secrets.IMAGE_URI1 }}
+  IMAGE_URI2: ${{ secrets.IMAGE_URI2 }}
+  IMAGE_URI3: ${{ secrets.IMAGE_URI3 }}
+  NET: ${{ secrets.NET }}
 on:
   push:
     branches: [main]

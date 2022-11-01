@@ -39,6 +39,10 @@ IMAGE_URI3='https://...'
 MATIC_ACCOUNT1='...'
 MATIC_ACCOUNT2='...'
 MATIC_ACCOUNT3='...'
+
+# defines the network to use during deployment
+# 'matic' | 'hardhat'
+NET='...'
 ```
 
 Run tests, by default runs in local hardhat node
