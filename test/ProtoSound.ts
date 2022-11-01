@@ -20,7 +20,7 @@ describe("ProtoSound", function () {
     process.env.IMAGE_URI3
   ] as string[];
 
-  beforeEach(async () => {
+  beforeEach(async () => {
     // instances the VRFConsumer mock contract
     const VRFv2ConsumerMock = await ethers.getContractFactory("VRFv2ConsumerMock");
     const vrfV2ConsumerMock = await VRFv2ConsumerMock.deploy();
