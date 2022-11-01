@@ -1,4 +1,6 @@
 name: CI contracts tests
+env:
+  DOTENV_CONFIG_PATH: "./.env"
 on:
   push:
     branches: [main]
