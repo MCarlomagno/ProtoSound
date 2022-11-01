@@ -1,8 +1,10 @@
 import { HardhatUserConfig } from "hardhat/config";
 import dotenv from "dotenv";
 import "@nomicfoundation/hardhat-toolbox";
+import { resolve } from "path";
 
-dotenv.config();
+const dotenvConfigPath: string = process.env.DOTENV_CONFIG_PATH || "./.env";
+dotenv.config({ path: resolve(__dirname, dotenvConfigPath) });
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
