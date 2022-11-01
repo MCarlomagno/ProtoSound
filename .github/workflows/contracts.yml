@@ -30,5 +30,7 @@ jobs:
           node-version: '18.x'
       - run: yarn --ignore-scripts
         shell: bash
+      - name: Compile contracts
+        run: yarn hardhat compile
       - name: Run Tests
         run: yarn hardhat test
