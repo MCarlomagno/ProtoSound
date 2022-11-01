@@ -1,16 +1,4 @@
 name: CI contracts tests
-env:
-  MATIC_ACCOUNT1: ${{ secrets.MATIC_ACCOUNT1 }}
-  MATIC_ACCOUNT2: ${{ secrets.MATIC_ACCOUNT2 }}
-  MATIC_ACCOUNT3: ${{ secrets.MATIC_ACCOUNT3 }}
-  HARDHAT_ACCOUNT1: ${{ secrets.HARDHAT_ACCOUNT1 }}
-  HARDHAT_ACCOUNT2: ${{ secrets.HARDHAT_ACCOUNT2 }}
-  HARDHAT_ACCOUNT3: ${{ secrets.HARDHAT_ACCOUNT3 }}
-  AUDIO_URI: ${{ secrets.AUDIO_URI }}
-  IMAGE_URI1: ${{ secrets.IMAGE_URI1 }}
-  IMAGE_URI2: ${{ secrets.IMAGE_URI2 }}
-  IMAGE_URI3: ${{ secrets.IMAGE_URI3 }}
-  NET: ${{ secrets.NET }}
 on:
   push:
     branches: [main]
@@ -18,6 +6,20 @@ on:
     branches: [main]
 
 jobs:
+  - name: create env file
+      run: |
+        touch .env
+        echo MATIC_ACCOUNT1=${{ secrets.MATIC_ACCOUNT1 }} >> .env
+        echo MATIC_ACCOUNT2=${{ secrets.MATIC_ACCOUNT2 }} >> .env
+        echo MATIC_ACCOUNT3=${{ secrets.MATIC_ACCOUNT3 }} >> .env
+        echo HARDHAT_ACCOUNT1=${{ secrets.HARDHAT_ACCOUNT1 }} >> .env
+        echo HARDHAT_ACCOUNT2=${{ secrets.HARDHAT_ACCOUNT2 }} >> .env
+        echo HARDHAT_ACCOUNT3=${{ secrets.HARDHAT_ACCOUNT3 }} >> .env
+        echo AUDIO_URI=${{ secrets.AUDIO_URI }} >> .env
+        echo IMAGE_URI1=${{ secrets.IMAGE_URI1 }} >> .env
+        echo IMAGE_URI2=${{ secrets.IMAGE_URI2 }} >> .env
+        echo IMAGE_URI3=${{ secrets.IMAGE_URI3 }} >> .env
+        echo NET=${{ secrets.NET }} >> .env
   tests:
     runs-on: ubuntu-latest
 
