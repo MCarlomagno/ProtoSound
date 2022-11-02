@@ -1,9 +1,14 @@
 {
   "name": "ProtoSound",
+  "homepage": "http://mcarlomagno.github.io/ProtoSound",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Luis Lopez, Marcos Carlomagno, Agustin Longoni",
   "license": "MIT",
+  "scripts": {
+    "predeploy": "cd client && yarn build",
+    "deploy": "gh-pages -d client/dist"
+  },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",
     "@ethersproject/providers": "^5.4.7",
@@ -19,6 +24,7 @@
     "@types/node": ">=12.0.0",
     "chai": "^4.2.0",
     "ethers": "^5.4.7",
+    "gh-pages": "^4.0.0",
     "hardhat": "^2.12.0",
     "hardhat-gas-reporter": "^1.0.8",
     "solidity-coverage": "^0.8.0",
