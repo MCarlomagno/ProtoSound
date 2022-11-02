@@ -10,14 +10,19 @@ jobs:
 
     steps:
       - name: Checkout
+        working-directory: ./client
         uses: actions/checkout@v3
       - name: Install packages
+        working-directory: ./client
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
       - run: yarn --ignore-scripts
+        working-directory: ./client
         shell: bash
       - name: Build the project
+        working-directory: ./client
         run: yarn build --if-present
       - name: Run tests
+        working-directory: ./client
         run: yarn test
