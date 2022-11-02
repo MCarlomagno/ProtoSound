@@ -1,0 +1,23 @@
+name: Client tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  client_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install packages
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - run: yarn --ignore-scripts
+        shell: bash
+      - name: Build the project
+        run: yarn build --if-present
+      - name: Run tests
+        run: yarn test
