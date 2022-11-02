@@ -12,6 +12,4 @@ artifacts
 
 # client
 client/node_modules
-client/dist
 client/dist-ssr
-
