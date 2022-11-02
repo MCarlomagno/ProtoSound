@@ -1,7 +1,14 @@
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import { AppShell } from '@mantine/core';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
 import { useState } from 'react';
 import AppHeader from './components/header/AppHeader';
+import Feed from './pages/Feed';
+import Profile from './pages/Profile';
 
 function App() {
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
@@ -11,8 +18,14 @@ function App() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        <AppShell header={<AppHeader></AppHeader>}>
-        </AppShell>
+        <Router>
+          <AppShell header={<AppHeader></AppHeader>}>
+            <Routes>
+              <Route path="/" element={<Feed />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+          </AppShell>
+        </Router>
       </MantineProvider>
     </ColorSchemeProvider>
   );

@@ -1,7 +1,7 @@
 import { Switch, Group, useMantineColorScheme, useMantineTheme, Center } from '@mantine/core';
 import { IconSun, IconMoonStars } from '@tabler/icons';
 
-function SwitchToggle() {
+function SwitchThemeToggle() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const theme = useMantineTheme();
 
@@ -17,4 +17,4 @@ function SwitchToggle() {
   );
 }
 
-export default SwitchToggle
+export default SwitchThemeToggle
