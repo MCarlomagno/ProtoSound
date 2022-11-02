@@ -13,3 +13,9 @@ Run in dev mode
 ```shell
 yarn dev
 ```
+
+### Testing
+
+```shell
+yarn test
+```
