@@ -12,13 +12,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install packages
-        working-directory: ./client
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-      - name: Install dependencies
         working-directory: ./client
-        run: yarn --ignore-scripts
+      - run: yarn --ignore-scripts
         shell: bash
       - name: Build the project
         working-directory: ./client

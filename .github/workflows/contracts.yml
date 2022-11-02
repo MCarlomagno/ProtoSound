@@ -1,4 +1,4 @@
-name: CI contracts tests
+name: Contracts tests
 on:
   push:
     branches: [main]
