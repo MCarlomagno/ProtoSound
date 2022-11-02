@@ -1,7 +1,7 @@
 import { ActionIcon, Button, Container, createStyles, Group, Header } from "@mantine/core"
 import { IconWorld, IconUser } from '@tabler/icons';
 import { Link } from 'react-router-dom';
-import SwitchThemeToggle from "./SwitchThemeToggle";
+import SwitchThemeToggle from "../SwitchThemeToggle/SwitchThemeToggle";
 
 const useStyles = createStyles((theme) => ({
   header: {

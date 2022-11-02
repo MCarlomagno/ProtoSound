@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useIPFS } from '../hooks/useIPFS';
+import { useIPFS } from '../../hooks/useIPFS';
 
 function Upload() {
   const [loading, setLoading] = useState<boolean>(true);

@@ -6,10 +6,10 @@ import {
   Route
 } from "react-router-dom";
 import { useState } from 'react';
-import AppHeader from './components/header/AppHeader';
-import Feed from './pages/Feed';
-import Profile from './pages/Profile';
-import Home from './pages/Home';
+import AppHeader from './components/AppHeader/AppHeader';
+import Feed from './pages/Feed/Feed';
+import Profile from './pages/Profile/Profile';
+import Home from './pages/Home/Home';
 
 function App() {
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
