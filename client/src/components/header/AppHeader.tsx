@@ -19,8 +19,10 @@ function AppHeader() {
     <Header height={60} p="lg">
       <Container className={classes.header}>
         <Group>
-          Protosound
-          <ActionIcon component={Link} to="/">
+          <Link to="/">
+            Protosound
+          </Link>
+          <ActionIcon component={Link} to="/feed">
             <IconWorld size={18} />
           </ActionIcon>
           <ActionIcon component={Link} to="/profile">

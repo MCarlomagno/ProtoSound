@@ -9,6 +9,7 @@ import { useState } from 'react';
 import AppHeader from './components/header/AppHeader';
 import Feed from './pages/Feed';
 import Profile from './pages/Profile';
+import Home from './pages/Home';
 
 function App() {
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
@@ -21,7 +22,8 @@ function App() {
         <Router>
           <AppShell header={<AppHeader></AppHeader>}>
             <Routes>
-              <Route path="/" element={<Feed />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/feed" element={<Feed />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </AppShell>
