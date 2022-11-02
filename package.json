@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "predeploy": "cd client && yarn build",
-    "deploy": "gh-pages -d client/dist"
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",
