@@ -1,5 +1,6 @@
 # ProtoSound 🎵
-[![CI contracts tests](https://github.com/MCarlomagno/ProtoSound/actions/workflows/contracts.yml/badge.svg)](https://github.com/MCarlomagno/ProtoSound/actions/workflows/contracts.yml)
+[![Contracts tests](https://github.com/MCarlomagno/ProtoSound/actions/workflows/contracts.yml/badge.svg)](https://github.com/MCarlomagno/ProtoSound/actions/workflows/contracts.yml)
+[![Client tests](https://github.com/MCarlomagno/ProtoSound/actions/workflows/client.yml/badge.svg)](https://github.com/MCarlomagno/ProtoSound/actions/workflows/client.yml)
 
 **ProtoSound** is a web3 platform where musicians can upload their songs minting a *Soulbound Tokens (song + cover)* for their profile.
 
