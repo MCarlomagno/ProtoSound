@@ -1,4 +1,5 @@
-import { Button, Container, createStyles, Header } from "@mantine/core"
+import { Button, Container, createStyles, Group, Header } from "@mantine/core"
+import SwitchToggle from "./SwitchToggle";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -16,9 +17,13 @@ function AppHeader() {
     <Header height={60} p="lg">
       <Container className={classes.header}>
         Protosound
-        <Button>
-          Connect
-        </Button>
+        <Group>
+          <Button>
+            Connect
+          </Button>
+          <SwitchToggle />
+        </Group>
+
       </Container>
     </Header>
   )
