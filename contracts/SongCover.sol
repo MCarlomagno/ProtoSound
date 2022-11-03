@@ -23,6 +23,7 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     mapping(address => mapping(uint256 => Collection)) public artistsReleases;
 
     struct Collection {
+        string name;
         uint256 price;
         uint256[] tokenIds;
     }
@@ -36,9 +37,15 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     /**
      * @dev Mints a new collection of NFTs for the artist.
      */
-    function multiMint(address to, uint256 price, string[] memory uris) public {
+    function multiMint(
+        address to,
+        uint256 price,
+        string[] memory uris,
+        string memory name
+    ) public returns(uint256 id) {
         uint256 collectionId = _collectionIdCounter.current();
         artistsReleases[to][collectionId].price = price;
+        artistsReleases[to][collectionId].name = name;
 
         for (uint i = 0; i < uris.length; i++) {
             uint256 tokenId = _tokenIdCounter.current();
@@ -49,13 +56,14 @@ contract SongCover is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
             // adds the new token to the artist collection release.
             artistsReleases[to][collectionId].tokenIds.push(tokenId);
         }
-        _collectionIdCounter.increment();
         emit CollectionReleased(
             to,
             collectionId,
             artistsReleases[to][collectionId].price,
             artistsReleases[to][collectionId].tokenIds
         );
+        _collectionIdCounter.increment();
+        return collectionId;
     }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {

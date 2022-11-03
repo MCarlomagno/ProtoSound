@@ -5,8 +5,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./SongCover.sol";
 import "./SongAuthorCover.sol";
 import "./SongAudio.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract ProtoSound is Ownable {
+
+    using Counters for Counters.Counter;
+    Counters.Counter private _songIdCounter;
 
     // address of the SongCover NFT token.
     address public songCoverAddress;
@@ -22,6 +26,16 @@ contract ProtoSound is Ownable {
     struct User {
         string nick;
         bool active;
+        uint256[] songs;
+    }
+
+    // songId => SongMetadata
+    mapping(uint256 => SongMetadata) public songMetadata;
+
+    struct SongMetadata {
+        uint256 authorCoverTokenId;
+        uint256 authorAudioTokenId;
+        uint256 coverCollectionId;
     }
 
     constructor(address _vrfConsumerAddress) {
@@ -47,18 +61,27 @@ contract ProtoSound is Ownable {
 
     function mintSong(
         uint256 price,
+        string memory name,
         string memory authorCoverUri,
         string memory audioUri,
         string[] memory tokenUris
     ) public {
         require(users[msg.sender].active, "User not found");
+        uint256 songId = _songIdCounter.current();
+
         SongCover songCover = SongCover(songCoverAddress);
         SongAuthorCover songAuthorCover = SongAuthorCover(songAuthorCoverAddress);
         SongAudio songAudio = SongAudio(songAuthorAudioAddress);
 
-        songAuthorCover.safeMint(msg.sender, authorCoverUri);
-        songAudio.safeMint(msg.sender, audioUri);
-        songCover.multiMint(msg.sender, price, tokenUris);
+        uint256 authorCoverTokenId = songAuthorCover.safeMint(msg.sender, authorCoverUri);
+        uint256 authorAudioTokenId = songAudio.safeMint(msg.sender, audioUri);
+        uint256 coverCollectionId = songCover.multiMint(msg.sender, price, tokenUris, name);
+
+        songMetadata[songId].authorCoverTokenId = authorCoverTokenId;
+        songMetadata[songId].authorAudioTokenId = authorAudioTokenId;
+        songMetadata[songId].coverCollectionId = coverCollectionId;
+        users[msg.sender].songs.push(songId);
+        _songIdCounter.increment();
     }
 
     function transferSongCover(address payable artist, uint256 collectionId) public payable {
@@ -91,8 +114,8 @@ contract ProtoSound is Ownable {
     function userByAddress(address _address)
         public
         view
-        returns(string memory nick, bool active)
+        returns(string memory nick, bool active, uint256[] memory songs)
     {
-        return (users[_address].nick, users[_address].active);
+        return (users[_address].nick, users[_address].active, users[_address].songs);
     }
 }

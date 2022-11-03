@@ -6,8 +6,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
-
 describe("SongCover", function () {
   let songCover: SongCover;
   const imageUris = [
@@ -15,6 +13,7 @@ describe("SongCover", function () {
     process.env.IMAGE_URI2,
     process.env.IMAGE_URI3,
   ] as string[];
+  const songName = 'test_name';
   
   beforeEach(async function () {
     const VRFv2ConsumerMock = await ethers.getContractFactory("VRFv2ConsumerMock");
@@ -29,7 +28,7 @@ describe("SongCover", function () {
     const [acc1, acc2, acc3] = await ethers.getSigners();
     // mints 3 tokens.
     songCover = songCover.connect(acc1);
-    let tx: ContractTransaction = await songCover.multiMint(acc2.address, 1, imageUris);
+    let tx: ContractTransaction = await songCover.multiMint(acc2.address, 1, imageUris, songName);
     await tx.wait();
     const ownerToken0 = await songCover.ownerOf(0);
     const ownerToken1 = await songCover.ownerOf(1);
@@ -52,7 +51,7 @@ describe("SongCover", function () {
 
     // mints 3 tokens.
     songCover = songCover.connect(acc1);
-    const tx2: ContractTransaction = await songCover.multiMint(acc2.address, 1, imageUris);
+    const tx2: ContractTransaction = await songCover.multiMint(acc2.address, 1, imageUris, songName);
     await tx2.wait();
 
     // we override the random oracle by
@@ -78,7 +77,7 @@ describe("SongCover", function () {
 
     // mints 3 tokens.
     songCover = songCover.connect(acc1);
-    const tx2: ContractTransaction = await songCover.multiMint(acc2.address, 1, imageUris);
+    const tx2: ContractTransaction = await songCover.multiMint(acc2.address, 1, imageUris, songName);
     await tx2.wait();
 
     // transfers all the 3 tokens.

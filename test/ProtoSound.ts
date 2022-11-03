@@ -19,6 +19,7 @@ describe("ProtoSound", function () {
     process.env.IMAGE_URI2,
     process.env.IMAGE_URI3
   ] as string[];
+  const songName = 'test_name';
 
   beforeEach(async () => {
     // instances the VRFConsumer mock contract
@@ -79,7 +80,7 @@ describe("ProtoSound", function () {
     const [acc1, acc2, acc3] = await ethers.getSigners();
     
     const tx: Promise<ContractTransaction> = protoSound
-      .mintSong(1, authorCoverUri, audioUri, tokenUris);
+      .mintSong(1, songName, authorCoverUri, audioUri, tokenUris);
     await expect(tx).to.be.rejectedWith('User not found');
   });
 
@@ -96,7 +97,7 @@ describe("ProtoSound", function () {
     await tx.wait();
 
     // acc2 mints a song.
-    const tx3: ContractTransaction = await protoSound.mintSong(1, authorCoverUri, audioUri, tokenUris);
+    const tx3: ContractTransaction = await protoSound.mintSong(1, songName, authorCoverUri, audioUri, tokenUris);
     await tx3.wait();
 
     const songAudioOwner = await songAudio.ownerOf(0);
@@ -132,7 +133,7 @@ describe("ProtoSound", function () {
     await tx3.wait();
     
     // acc2 mints a song with Price = 1 wei
-    const tx4: ContractTransaction = await protoSound.mintSong(price, authorCoverUri, audioUri, tokenUris);
+    const tx4: ContractTransaction = await protoSound.mintSong(price, songName, authorCoverUri, audioUri, tokenUris);
     await tx4.wait();
 
     // check ownership of the first token
@@ -153,8 +154,8 @@ describe("ProtoSound", function () {
     const acc3BalanceAfter = await acc3.getBalance();
 
     // check balances updated
-    expect(Number(acc3BalanceAfter)).to.be.lessThan(Number(acc3BalanceBefore) - price);
-    expect(Number(acc2BalanceAfter)).to.be.equal(Number(acc2BalanceBefore) + price);
+    expect(Number(acc3BalanceAfter)).to.be.lessThan(Number(acc3BalanceBefore.sub(price)));
+    expect(Number(acc2BalanceAfter)).to.be.equal(Number(acc2BalanceBefore.add(price)));
 
     // check ownership of the first token
     const songCover0NewOwner = await songCover.ownerOf(0);

@@ -15,12 +15,13 @@ contract SongAudio is ERC721, ERC721URIStorage, Ownable {
 
     constructor() ERC721("SongAudio", "SA") {}
 
-    function safeMint(address to, string memory uri) public onlyOwner {
+    function safeMint(address to, string memory uri) public onlyOwner returns(uint256 id){
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
         emit Mint(to, uri, tokenId);
+        return tokenId;
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
