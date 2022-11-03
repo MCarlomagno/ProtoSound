@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [react()],
   base: '/ProtoSound/',
   build: {
-    target: 'es2020'
+    target: 'es2020',
+    outDir: '../dist'
   },
   optimizeDeps: {
     esbuildOptions: {
