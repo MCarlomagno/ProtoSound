@@ -19,7 +19,7 @@ function App() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        <Router>
+        <Router basename='ProtoSound'>
           <AppShell header={<AppHeader></AppHeader>}>
             <Routes>
               <Route path="/" element={<Home />} />
