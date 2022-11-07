@@ -22,7 +22,7 @@ function Home() {
             </Text>
           </Stack>
 
-          <Button mx={'md'} leftIcon={<IconDisc size={14} />}>
+          <Button mx={'md'} variant="white" style={{height:50}} leftIcon={<IconDisc size={14} />}>
             Create new release
           </Button>
         </Center>
@@ -43,7 +43,7 @@ function Home() {
             </Text>
           </Stack>
 
-          <Button mx={'md'} leftIcon={<IconWorld size={14} />}>
+          <Button mx={'md'} variant="white" style={{height:50}} leftIcon={<IconWorld size={14} />}>
             Browse latest releases
           </Button>
         </Center>
