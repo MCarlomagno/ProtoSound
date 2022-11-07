@@ -27,6 +27,10 @@ const useStyles = createStyles((theme) => ({
     fontWeight: 700,
     textTransform: 'uppercase',
   },
+
+  button: {
+    color: 'black',
+  }
 }));
 
 interface ButtonProps {
@@ -60,7 +64,7 @@ export function CardBackground({ image, title, description, buttonProps }: Artic
             {description}
           </Text>
         </div>
-        <Button variant="white" leftIcon={buttonProps.label === 'browse' ? <IconWorld /> : <IconDisc />}>
+        <Button className={classes.button} variant={'white'} leftIcon={buttonProps.icon === 'browse' ? <IconWorld /> : <IconDisc />}>
           {buttonProps.label}
         </Button>
     </Paper>
