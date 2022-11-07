@@ -1,5 +1,6 @@
-import { ActionIcon, Button, Container, createStyles, Group, Header } from "@mantine/core"
+import { ActionIcon, Avatar, Button, Container, createStyles, Group, Header, Indicator } from "@mantine/core"
 import { IconWorld, IconUser } from '@tabler/icons';
+import { useState } from "react";
 import { Link } from 'react-router-dom';
 import SwitchThemeToggle from "../SwitchThemeToggle/SwitchThemeToggle";
 
@@ -14,6 +15,7 @@ const useStyles = createStyles((theme) => ({
 
 function AppHeader() {
   const { classes } = useStyles();
+  const [address, setAddress] = useState('');
 
   return (
     <Header height={60} p="lg">
@@ -30,9 +32,12 @@ function AppHeader() {
           </ActionIcon>
         </Group>
         <Group>
-          <Button>
-            Connect
-          </Button>
+          <Indicator inline dot processing size={12} color={'yellow'}>
+            <Button>
+              Connect
+            </Button>
+          </Indicator>
+          <Avatar src={address ?? `https://avatars.dicebear.com/api/identicon/${address}.svg`} />
           <SwitchThemeToggle />
         </Group>
       </Container>

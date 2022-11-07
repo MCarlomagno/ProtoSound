@@ -5,6 +5,6 @@ import Profile from './Profile';
 describe('Profile', () => {
   test('renders Feed page', async () => {
     render(<Profile/>)
-    expect(screen.getByText('Profile')).toBeDefined()
+    expect(screen.getByText('Your releases')).toBeDefined()
   })
 });
