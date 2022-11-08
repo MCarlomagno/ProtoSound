@@ -2,6 +2,7 @@ import { createStyles, Paper, Text, Title, Button } from '@mantine/core';
 import { IconDisc, IconWorld } from '@tabler/icons';
 
 const useStyles = createStyles((theme) => ({
+
   card: {
     height: 400,
     display: 'flex',
@@ -9,7 +10,11 @@ const useStyles = createStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     backgroundSize: 'cover',
-    backgroundPositionY: '100%'
+    backgroundPositionY: '100%',
+    transition: 'transform 500ms ease',
+    [`&:hover`]: {
+      transform: 'scale(1.03)',
+    },
   },
 
   title: {

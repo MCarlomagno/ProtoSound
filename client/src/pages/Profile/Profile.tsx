@@ -1,20 +1,87 @@
-import { Card, Image, Text, Center, Container, SimpleGrid, Avatar, Alert, Group, ActionIcon, Tabs, Dialog, TextInput, Button, Stack, BackgroundImage, Divider, Title, Space } from '@mantine/core';
-import { IconAlertCircle, IconBucket, IconEdit, IconMusic, IconSeeding } from '@tabler/icons';
+import { Card, Image, Text, Center, Container, SimpleGrid, Alert, Tabs, Paper, createStyles, Badge, Group, Stack, ActionIcon } from '@mantine/core';
+import { IconAlertCircle, IconBucket, IconPlayerPause, IconPlayerPlay, IconSeeding } from '@tabler/icons';
 import { useState } from 'react';
 import mockdata from '../../mockdata.json';
 import { ProfileHeader } from './ProfileHeader';
 
+const useStyles = createStyles((theme) => ({
+  card: {
+    height: 300,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    backgroundSize: 'cover',
+    backgroundPositionY: '100%',
+    transition: 'transform 500ms ease',
+    [`&:hover`]: {
+      transform: 'scale(1.03)',
+    },
+    cursor: 'pointer'
+  },
+
+  group: {
+    width: '100%'
+  },
+
+  title: {
+    color: '#fafafa',
+    fontWeight: 500,
+    fontSize: 20
+  },
+
+  subtitle: {
+    color: '#efefef',
+    fontWeight: 400,
+    fontSize: 15
+  },
+
+  stack: {
+    gap: 0
+  }
+}));
 
 function UserReleases() {
+  const { classes } = useStyles();
+  const [playing, setPlaying] = useState(false);
+
+  const items = mockdata.map((item) => {
+    return (
+      <Paper
+        shadow="md"
+        p="xl"
+        radius="lg"
+        sx={{ backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(${item.image})` }}
+        className={classes.card}
+      >
+        <Group position={'right'} className={classes.group}>
+          <Badge>
+            Soulbound NFT
+          </Badge>
+        </Group>
+        
+        <Group className={classes.group}>
+          <Stack className={classes.stack}>
+            <Text className={classes.title}>
+              {item.name}
+            </Text>
+          </Stack>
+        </Group>
+      </Paper>
+    );
+  });
+
   return (
-    <Title my={'xl'} order={3}>
-      Your releases
-    </Title>
+    <SimpleGrid
+      cols={3}
+      mt="md"
+      breakpoints={[{ maxWidth: 'sm', cols: 1 }, { maxWidth: 'md', cols: 2 }]}>
+      {items}
+    </SimpleGrid>
   )
 }
 
 function UserCollected() {
-
   const items = mockdata.map((item) => (
     <Card withBorder radius="md" p="md" key={item.name}>
       <Card.Section>

@@ -1,7 +1,6 @@
-import { Card, Image, Text, Center, Container, SimpleGrid, Avatar, Alert, Group, ActionIcon, Tabs, Dialog, TextInput, Button, Stack, BackgroundImage, Divider, Title, Space } from '@mantine/core';
-import { IconAlertCircle, IconBucket, IconEdit, IconMusic, IconSeeding } from '@tabler/icons';
+import { Text, Avatar, Group, ActionIcon, Dialog, TextInput, Button } from '@mantine/core';
+import { IconEdit, IconMusic } from '@tabler/icons';
 import { useState } from 'react';
-import mockdata from '../../mockdata.json';
 
 
 interface User {
