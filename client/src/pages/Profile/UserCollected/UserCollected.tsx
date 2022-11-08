@@ -2,6 +2,12 @@ import { Card, Image, Text, Center, SimpleGrid, createStyles, Badge, Paper, Grou
 import mockdata from '../../../mockdata.json';
 
 const useStyles = createStyles((theme) => ({
+  badge: {
+    width: '100%',
+    position: 'absolute',
+    top: '24px',
+    right: '24px'
+  },
   audio: {
     width: '100%',
     '&::-webkit-media-controls-panel': {
@@ -26,11 +32,10 @@ export function UserCollected() {
   const items = mockdata.map((item) => (
     <Card withBorder radius="md" p="md" key={item.name}>
       <Card.Section>
-        <Paper style={{ backgroundImage:`url(${item.image})`, height: 200 }} radius={0} p={'lg'}>
-          <Group position={'right'} style={{ width: '100%' }}>
-            <Badge style={{zIndex: 2}}>NFT</Badge>
+        <Image src={item.image} alt={item.name} height={200} />
+          <Group position={'right'} className={classes.badge}>
+            <Badge>NFT</Badge>
           </Group>
-        </Paper>
       </Card.Section>
       <Card.Section p="md">
         <Text size="xs" color="dimmed">
@@ -42,7 +47,7 @@ export function UserCollected() {
       </Card.Section>
       <Card.Section>
         <Center>
-          <audio className={classes.audio} src={item.audio} controls></audio>
+          <audio className={classes.audio} src={item.audio} controls />
         </Center>
       </Card.Section>
     </Card>
