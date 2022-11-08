@@ -1,4 +1,4 @@
-import { Text, SimpleGrid, Paper, createStyles, Badge, Group, Stack, Modal } from '@mantine/core';
+import { Text, SimpleGrid, Paper, createStyles, Badge, Group, Stack, Modal, Image, Center } from '@mantine/core';
 import { useState } from 'react';
 import mockdata from '../../../mockdata.json';
 
@@ -36,6 +36,22 @@ const useStyles = createStyles((theme) => ({
 
   stack: {
     gap: 0
+  },
+
+  audio: {
+    width: '100%',
+    '&::-webkit-media-controls-panel': {
+      backgroundColor: 'transparent',
+    },
+    '&::-webkit-media-controls-enclosure': {
+      backgroundColor: 'transparent',
+    },
+    '&::-webkit-media-controls-current-time-display': {
+      display: 'none',
+    },
+    '&::-webkit-media-controls-time-remaining-display': {
+      display: 'none'
+    }
   }
 }));
 
@@ -79,7 +95,11 @@ function Release({ name, author, audio, image }: ReleaseProps) {
         onClose={() => setOpened(false)}
         title={name}
       >
-        {/* Modal content */}
+        <Image src={image} alt={name} height={200} radius={'lg'} />
+        <Badge my={'md'}>Soulbound</Badge>
+        <Center>
+          <audio className={classes.audio} src={audio} controls />
+        </Center>
       </Modal>
     </Paper>
   );
