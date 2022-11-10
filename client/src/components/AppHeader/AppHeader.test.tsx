@@ -4,6 +4,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import AppHeader from './AppHeader';
 import { ColorSchemeProvider } from '@mantine/core';
 
+jest.mock('../../assets/logo.svg', () => 'https://test.com/');
+
 describe('AppHeader', () => {
   test('renders AppHeader component', async () => {
     // must render colorscheme + router
@@ -13,6 +15,6 @@ describe('AppHeader', () => {
           <Router><AppHeader/></Router>
       </ColorSchemeProvider>
     );
-    expect(screen.getByText('Protosound')).toBeDefined()
+    expect(screen.getByAltText('ProtoSound')).toBeDefined();
   })
 });

@@ -115,7 +115,7 @@ function Release({ name, author, audio, image, price }: ReleaseProps) {
             style={{maxHeight: 200, overflowY: 'scroll'}}
             mt="md"
             breakpoints={[{ maxWidth: 'sm', cols: 2 }]}>
-            {mockdata.map((item) => (<Image src={item.image} radius="sm"></Image>))}
+            {mockdata.map((item, i) => (<Image key={i} src={item.image} radius="sm"></Image>))}
           </SimpleGrid>
         </Card>
 
@@ -131,7 +131,7 @@ export function UserReleases() {
       cols={3}
       mt="md"
       breakpoints={[{ maxWidth: 'sm', cols: 1 }, { maxWidth: 'md', cols: 2 }]}>
-      {mockdata.map((item) => (<Release {...item} />))}
+      {mockdata.map((item, i) => (<Release key={i} {...item} />))}
     </SimpleGrid>
   )
 }

@@ -3,7 +3,7 @@ import { IconWorld, IconUser } from '@tabler/icons';
 import { useState } from "react";
 import { Link } from 'react-router-dom';
 import SwitchThemeToggle from "../SwitchThemeToggle/SwitchThemeToggle";
-import logo from '../../assets/logo.svg'
+import logo from '../../assets/logo.svg';
 import { useMediaQuery } from '@mantine/hooks';
 
 const useStyles = createStyles((theme) => ({
@@ -30,7 +30,7 @@ function AppHeader() {
       <Container className={ matches ? classes.headerMobile : classes.header}>
         <Group>
           <Link to="/">
-            <Image src={logo} height={30}/>
+            <Image src={logo} height={30} alt={'ProtoSound'}/>
           </Link>
           <ActionIcon component={Link} to="/feed">
             <IconWorld size={18} />
