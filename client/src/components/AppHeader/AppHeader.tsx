@@ -1,8 +1,9 @@
-import { ActionIcon, Avatar, Burger, Button, Container, createStyles, Group, Header, Indicator, MediaQuery } from "@mantine/core"
+import { ActionIcon, Avatar, Image, Button, Container, createStyles, Group, Header, Indicator, MediaQuery } from "@mantine/core"
 import { IconWorld, IconUser } from '@tabler/icons';
 import { useState } from "react";
 import { Link } from 'react-router-dom';
 import SwitchThemeToggle from "../SwitchThemeToggle/SwitchThemeToggle";
+import logo from '../../assets/logo.svg'
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -22,7 +23,7 @@ function AppHeader() {
       <Container className={classes.header}>
         <Group>
           <Link to="/">
-            Protosound
+            <Image src={logo} height={30}/>
           </Link>
           <ActionIcon component={Link} to="/feed">
             <IconWorld size={18} />
