@@ -1,5 +1,5 @@
-import { Text, Avatar, Group, ActionIcon, Dialog, TextInput, Button } from '@mantine/core';
-import { IconEdit, IconMusic } from '@tabler/icons';
+import { Text, Avatar, Group, ActionIcon, Dialog, TextInput, Button, Modal, Space, FileInput } from '@mantine/core';
+import { IconCurrencyDollar, IconEdit, IconMusic, IconUpload } from '@tabler/icons';
 import { useState } from 'react';
 
 
@@ -15,6 +15,7 @@ interface ProfileHeaderProps {
 export function ProfileHeader({ user }: ProfileHeaderProps) {
   const [editOpened, setEditOpened] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [releasing, setReleasing] = useState(false);
 
  return (
   <>
@@ -31,7 +32,7 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
           <Text size={'sm'} weight={200}>{user.address}</Text>
         </div>
       </Group>
-      <Button leftIcon={<IconMusic />}>Release Song</Button>
+      <Button leftIcon={<IconMusic />} onClick={() => setReleasing(!releasing)}>Release Song</Button>
     </Group>
 
     <Dialog
@@ -51,6 +52,52 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
         <Button loading={editing} onClick={() => setEditOpened(false)}>Edit</Button>
       </Group>
     </Dialog>
+
+    <Modal 
+      opened={releasing} 
+      onClose={() => setReleasing(false)} 
+      title="Release a new Song">
+      <TextInput
+        m={10}
+        placeholder="Song name"
+        label="Song name"
+        withAsterisk
+      />
+      <TextInput
+        m={10}
+        placeholder="Song NFT price (Matic)"
+        label="Song NFT price (Matic)"
+        withAsterisk
+        icon={<IconCurrencyDollar size={14}/>}
+        type={'number'}
+      />
+      <FileInput 
+        m={10}
+        label="Soulbound cover (image)"
+        placeholder="Soulbound cover (image)"
+        withAsterisk
+        icon={<IconUpload size={14}></IconUpload>} />
+      <FileInput 
+        m={10}
+        label="Soulbound song (audio)"
+        placeholder="Soulbound song (audio)"
+        withAsterisk
+        icon={<IconUpload size={14}></IconUpload>} />
+      <FileInput 
+        m={10}
+        label="NFT collection (images)"
+        placeholder="Soulbound song (images)"
+        withAsterisk
+        multiple
+        icon={<IconUpload size={14}></IconUpload>} />
+      <Group m={10} style={{justifyContent:'right'}}>
+        <Button 
+          leftIcon={<IconMusic></IconMusic>}
+          onClick={() => setReleasing(false)}>
+          Release
+        </Button>
+      </Group>
+    </Modal>
   </>
  )
 }
