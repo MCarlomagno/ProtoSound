@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link } from 'react-router-dom';
 import SwitchThemeToggle from "../SwitchThemeToggle/SwitchThemeToggle";
 import logo from '../../assets/logo.svg'
+import { useMediaQuery } from '@mantine/hooks';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -12,15 +13,21 @@ const useStyles = createStyles((theme) => ({
     alignItems: 'center',
     height: '100%',
   },
+
+  headerMobile: {
+    height: '100%',
+    justifyContent: 'center',
+  }
 }));
 
 function AppHeader() {
   const { classes } = useStyles();
   const [address, setAddress] = useState('');
+  const matches = useMediaQuery('(max-width: 600px)');
 
   return (
-    <Header height={60} p="lg">
-      <Container className={classes.header}>
+    <Header height={matches ? 120 : 60} style={{minHeight: matches ? 120 : 60}} p="lg">
+      <Container className={ matches ? classes.headerMobile : classes.header}>
         <Group>
           <Link to="/">
             <Image src={logo} height={30}/>
@@ -32,7 +39,7 @@ function AppHeader() {
             <IconUser size={18} />
           </ActionIcon>
         </Group>
-        <Group>
+        <Group >
           <Indicator inline dot processing size={12} color={'yellow'}>
             <Button>
               Connect
