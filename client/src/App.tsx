@@ -1,4 +1,4 @@
-import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
+import { ColorScheme, ColorSchemeProvider, MantineProvider, Navbar } from '@mantine/core';
 import { AppShell } from '@mantine/core';
 import {
   BrowserRouter as Router,
@@ -15,17 +15,21 @@ function App() {
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+  const [opened, setOpened] = useState(false);
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
         <Router basename='ProtoSound'>
-          <AppShell header={<AppHeader></AppHeader>}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/feed" element={<Feed />} />
-              <Route path="/profile" element={<Profile />} />
-            </Routes>
+          <AppShell
+            navbarOffsetBreakpoint="sm"
+            asideOffsetBreakpoint="sm"
+            header={<AppHeader></AppHeader>}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/feed" element={<Feed />} />
+                <Route path="/profile" element={<Profile />} />
+              </Routes>
           </AppShell>
         </Router>
       </MantineProvider>

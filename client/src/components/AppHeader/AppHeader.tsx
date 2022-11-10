@@ -1,4 +1,4 @@
-import { ActionIcon, Avatar, Button, Container, createStyles, Group, Header, Indicator } from "@mantine/core"
+import { ActionIcon, Avatar, Burger, Button, Container, createStyles, Group, Header, Indicator, MediaQuery } from "@mantine/core"
 import { IconWorld, IconUser } from '@tabler/icons';
 import { useState } from "react";
 import { Link } from 'react-router-dom';

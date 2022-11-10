@@ -1,4 +1,5 @@
-import { SimpleGrid, Title, Text, Card, Image, Center, Container, createStyles } from '@mantine/core';
+import { SimpleGrid, Title, Text, Card, Image, Center, Container, createStyles, Group, Badge, Button } from '@mantine/core';
+import { IconCurrencyDollar, IconZoomMoney } from '@tabler/icons';
 
 import mockdata from '../../mockdata.json';
 
@@ -30,17 +31,27 @@ function Feed() {
         <Image src={item.image} alt={item.name} height={200} />
       </Card.Section>
       <Card.Section p="md">
-          <Text size="xs" color="dimmed">
-            {item.author}
-          </Text>
-          <Text size="sm" weight={500}>
-            {item.name}
-          </Text>
+        <Group >
+          <div>
+            <Text size="xs" color="dimmed">
+              {item.author}
+            </Text>
+            <Text size="sm" weight={500}>
+              {item.name}
+            </Text>
+          </div>
+        </Group>
       </Card.Section>
       <Card.Section>
         <Center>
           <audio className={classes.audio} src={item.audio} controls />
         </Center>
+      </Card.Section>
+      <Card.Section p={'md'} >
+        <Group style={{justifyContent: 'space-between'}}>
+          <Badge color={'green'}>{item.price} Matic</Badge>
+          <Button variant='outline' leftIcon={<IconCurrencyDollar size={15}/>}>Get song</Button>
+        </Group>
       </Card.Section>
     </Card>
 
@@ -48,7 +59,8 @@ function Feed() {
 
   return (
     <Container>
-      <Title p={'lg'} order={2}>Feed</Title>
+      <Title px={'lg'} order={2}>Feed</Title>
+      <Text px={'lg'} color={'dimmed'}>Select your favorite song, purchase, listen and mint your own NFT</Text>
       <SimpleGrid
         cols={3}
         mt="md" 
