@@ -1,4 +1,4 @@
-import { Text, SimpleGrid, Paper, createStyles, Badge, Group, Stack, Modal, Image, Center } from '@mantine/core';
+import { Text, SimpleGrid, Paper, createStyles, Badge, Group, Stack, Modal, Image, Center, Card } from '@mantine/core';
 import { useState } from 'react';
 import mockdata from '../../../mockdata.json';
 
@@ -59,10 +59,11 @@ interface ReleaseProps {
   name: string,
   author: string,
   audio: string,
-  image: string
+  image: string,
+  price: number
 }
 
-function Release({ name, author, audio, image }: ReleaseProps) {
+function Release({ name, author, audio, image, price }: ReleaseProps) {
   const { classes } = useStyles();
   const [opened, setOpened] = useState(false);
 
@@ -96,10 +97,28 @@ function Release({ name, author, audio, image }: ReleaseProps) {
         title={name}
       >
         <Image src={image} alt={name} height={200} radius={'lg'} />
-        <Badge my={'md'}>Soulbound</Badge>
+        <Group m={10} style={{ justifyContent: 'space-between'}}>
+          {name}
+          <Badge color={'green'}>Price: {price} Matic</Badge>
+        </Group>
         <Center>
           <audio className={classes.audio} src={audio} controls />
         </Center>
+        <Card p={20} my={10} withBorder={true} style={{background: '#56da565e'}}>
+          Total Revenue
+          <Text weight={800} color="green">200 Matic</Text>
+        </Card>
+        <Card withBorder={true}>
+          Collection
+          <SimpleGrid
+            cols={3}
+            style={{maxHeight: 200, overflowY: 'scroll'}}
+            mt="md"
+            breakpoints={[{ maxWidth: 'sm', cols: 2 }]}>
+            {mockdata.map((item) => (<Image src={item.image} radius="sm"></Image>))}
+          </SimpleGrid>
+        </Card>
+
       </Modal>
     </Paper>
   );
