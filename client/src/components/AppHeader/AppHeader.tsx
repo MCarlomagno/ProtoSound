@@ -1,10 +1,12 @@
-import { ActionIcon, Avatar, Image, Button, Container, createStyles, Group, Header, Indicator, MediaQuery } from "@mantine/core"
+import { ActionIcon, Avatar, Image, Button, Container, createStyles, Group, Header, Indicator, Text } from "@mantine/core"
 import { IconWorld, IconUser } from '@tabler/icons';
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import SwitchThemeToggle from "../SwitchThemeToggle/SwitchThemeToggle";
 import logo from '../../assets/logo.svg';
 import { useMediaQuery } from '@mantine/hooks';
+import { useMetamask } from "../../hooks/useMetamask";
+import { formatAddress } from "../../utils/stringUtils";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -22,8 +24,25 @@ const useStyles = createStyles((theme) => ({
 
 function AppHeader() {
   const { classes } = useStyles();
+  const { connect, accounts, getAccounts } = useMetamask();
   const [address, setAddress] = useState('');
   const matches = useMediaQuery('(max-width: 600px)');
+
+  useEffect(() => {
+    getAccounts().then((acc) => {
+      if (acc[0]) {
+        setAddress(acc[0]);
+      }
+    });
+  }, [accounts]);
+
+  const connectWallet = useCallback(async () => {
+    await connect();
+    const acc = await getAccounts();
+    if (acc[0]) {
+      setAddress(acc[0]);
+    }
+  }, [accounts]);
 
   return (
     <Header height={matches ? 120 : 60} style={{minHeight: matches ? 120 : 60}} p="lg">
@@ -40,12 +59,19 @@ function AppHeader() {
           </ActionIcon>
         </Group>
         <Group >
-          <Indicator inline dot processing size={12} color={'yellow'}>
-            <Button>
-              Connect
-            </Button>
-          </Indicator>
-          <Avatar src={address ?? `https://avatars.dicebear.com/api/identicon/${address}.svg`} />
+        {address 
+          ? <>
+              <Text>{formatAddress(address)}</Text>
+              <Avatar src={`https://avatars.dicebear.com/api/identicon/${address}.svg`} />
+            </>  
+          : <> 
+              <Indicator inline dot processing size={12} color={'yellow'}>
+                <Button onClick={connectWallet}>
+                  Connect
+                </Button>
+              </Indicator>
+            <Avatar />
+            </>}
           <SwitchThemeToggle />
         </Group>
       </Container>
