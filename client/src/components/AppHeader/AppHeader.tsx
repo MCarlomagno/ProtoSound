@@ -1,4 +1,4 @@
-import { ActionIcon, Avatar, Image, Button, Container, createStyles, Group, Header, Indicator, Text } from "@mantine/core"
+import { ActionIcon, Avatar, Image, Button, Container, createStyles, Group, Header, Indicator, Text, Badge, Tooltip } from "@mantine/core"
 import { IconWorld, IconUser } from '@tabler/icons';
 import { useCallback, useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import logo from '../../assets/logo.svg';
 import { useMediaQuery } from '@mantine/hooks';
 import { useMetamask } from "../../hooks/useMetamask";
 import { formatAddress } from "../../utils/stringUtils";
+
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -24,9 +25,11 @@ const useStyles = createStyles((theme) => ({
 
 function AppHeader() {
   const { classes } = useStyles();
-  const { connect, accounts, getAccounts } = useMetamask();
+  const { connect, accounts, getAccounts, network } = useMetamask();
   const [address, setAddress] = useState('');
   const matches = useMediaQuery('(max-width: 600px)');
+
+  const validNetwork = network?.chainId === 80001;
 
   useEffect(() => {
     getAccounts().then((acc) => {
@@ -59,8 +62,17 @@ function AppHeader() {
           </ActionIcon>
         </Group>
         <Group >
-        {address 
+        {address && network
           ? <>
+              <Tooltip label={
+                validNetwork 
+                ? 'You are in the right network :)'
+                : 'Please switch your network to Polygon Mumbai and reload'
+              }>
+                <Badge color={validNetwork ? 'violet':'red'}>
+                  {validNetwork ? 'Polygon Mumbai' : 'Invalid Network'}
+                </Badge>
+              </Tooltip>
               <Text>{formatAddress(address)}</Text>
               <Avatar src={`https://avatars.dicebear.com/api/identicon/${address}.svg`} />
             </>  

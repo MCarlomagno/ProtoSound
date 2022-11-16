@@ -1,6 +1,5 @@
 import * as ethers from 'ethers';
-import { 
-  ExternalProvider, 
+import {
   JsonRpcSigner, 
   Network, 
   Web3Provider 
@@ -9,17 +8,9 @@ import { useState } from 'react';
 
 declare global {
   interface Window {
-    ethereum: ExternalProvider;
+    ethereum: any;
   }
 }
-
-type ExtensionForProvider = {
-  on: (event: string, callback: (...params: any) => void) => void;
-};
-
-// Adds on stream support for listening events.
-// see https://github.com/ethers-io/ethers.js/discussions/3230
-type GenericProvider = ExternalProvider & ExtensionForProvider;
 
 interface ProviderRpcError extends Error {
   message: string;
@@ -38,24 +29,22 @@ function useMetamask() {
     if (provider) return provider;
 
     const newProvider = new Web3Provider(window.ethereum);
-    listenToEvents(newProvider);
     setProvider(newProvider);
+
+    window.ethereum.on('accountsChanged', (acc: string[]) => {
+      setAccounts(acc);
+    });
+
+    window.ethereum.on('networkChanged', (net: Network) => {
+      setNetwork(net);
+    });
+
+    window.ethereum.on('disconnect', (error: ProviderRpcError) => {
+      console.log('disconnected');
+    });
 
     return newProvider
   }
-
-  const listenToEvents = (provider: Web3Provider) => {
-    (window.ethereum as GenericProvider).on('accountsChanged', (acc: string[]) => {
-      setAccounts(acc)
-    });
-    (window.ethereum as GenericProvider).on('chainChanged', async (net: number) => {
-      console.log("chainChanged", net);
-      throw 'chain changed';
-    });
-    (window.ethereum as GenericProvider).on('disconnect', (error: ProviderRpcError) => {
-      throw Error(error.message);
-    });
-  } 
   
   const connect = async () => {
     const provider = setupProvider();
