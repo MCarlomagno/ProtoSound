@@ -32,6 +32,9 @@ contract ProtoSound is Ownable {
         uint256 authorCoverTokenId;
         uint256 authorAudioTokenId;
         uint256 coverCollectionId;
+        string authorCoverUri;
+        string audioUri;
+        string[] tokenUris;
     }
 
     constructor(address _vrfConsumerAddress) {
@@ -67,6 +70,10 @@ contract ProtoSound is Ownable {
         songMetadata[songId].authorCoverTokenId = authorCoverTokenId;
         songMetadata[songId].authorAudioTokenId = authorAudioTokenId;
         songMetadata[songId].coverCollectionId = coverCollectionId;
+        songMetadata[songId].authorCoverUri = authorCoverUri;
+        songMetadata[songId].audioUri = audioUri;
+        songMetadata[songId].tokenUris = tokenUris;
+
         songs[msg.sender].push(songId);
         _songIdCounter.increment();
     }
@@ -82,6 +89,7 @@ contract ProtoSound is Ownable {
 
         // transfers the price of the token to the artist.
         (bool sent,) = artist.call{value: price}("");
+
         require(sent, "Failed to send transaction");
     }
 
@@ -97,11 +105,11 @@ contract ProtoSound is Ownable {
         songAuthorAudioAddress = _address;
     }
 
-    function songsAmount(address addr) public view returns (uint256) {
-        return songs[addr].length;
-    }
-
     function getSongs(address addr) public view returns(uint256[] memory) {
         return songs[addr];
+    }
+
+    function getSongMetadata(uint256 songId) public view returns(SongMetadata memory) {
+        return songMetadata[songId];
     }
 }
