@@ -21,18 +21,14 @@ contract ProtoSound is Ownable {
     // address of the soulbound audio
     address public songAuthorAudioAddress;
 
-    mapping(address => User) public users;
-
-    struct User {
-        string nick;
-        bool active;
-        uint256[] songs;
-    }
+    mapping(address => uint256[]) public songs;
 
     // songId => SongMetadata
     mapping(uint256 => SongMetadata) public songMetadata;
 
     struct SongMetadata {
+        uint256 price;
+        string name;
         uint256 authorCoverTokenId;
         uint256 authorAudioTokenId;
         uint256 coverCollectionId;
@@ -49,16 +45,6 @@ contract ProtoSound is Ownable {
         songAuthorAudioAddress = address(songAudio);
     }
 
-    function create(address _address, string memory _nick) public onlyOwner {
-        users[_address].nick = _nick;
-        users[_address].active = true;
-    }
-
-    function changeNick(address _address, string memory _nick) public onlyOwner {
-        require(users[_address].active, "User not found");
-        users[_address].nick = _nick;
-    }
-
     function mintSong(
         uint256 price,
         string memory name,
@@ -66,7 +52,6 @@ contract ProtoSound is Ownable {
         string memory audioUri,
         string[] memory tokenUris
     ) public {
-        require(users[msg.sender].active, "User not found");
         uint256 songId = _songIdCounter.current();
 
         SongCover songCover = SongCover(songCoverAddress);
@@ -77,15 +62,16 @@ contract ProtoSound is Ownable {
         uint256 authorAudioTokenId = songAudio.safeMint(msg.sender, audioUri);
         uint256 coverCollectionId = songCover.multiMint(msg.sender, price, tokenUris, name);
 
+        songMetadata[songId].name = name;
+        songMetadata[songId].price = price;
         songMetadata[songId].authorCoverTokenId = authorCoverTokenId;
         songMetadata[songId].authorAudioTokenId = authorAudioTokenId;
         songMetadata[songId].coverCollectionId = coverCollectionId;
-        users[msg.sender].songs.push(songId);
+        songs[msg.sender].push(songId);
         _songIdCounter.increment();
     }
 
     function transferSongCover(address payable artist, uint256 collectionId) public payable {
-        require(users[artist].active, "Artist not found");
         SongCover songCover = SongCover(songCoverAddress);
         uint256 price = songCover.collectionPrice(artist, collectionId);
 
@@ -111,11 +97,11 @@ contract ProtoSound is Ownable {
         songAuthorAudioAddress = _address;
     }
 
-    function userByAddress(address _address)
-        public
-        view
-        returns(string memory nick, bool active, uint256[] memory songs)
-    {
-        return (users[_address].nick, users[_address].active, users[_address].songs);
+    function songsAmount(address addr) public view returns (uint256) {
+        return songs[addr].length;
+    }
+
+    function getSongs(address addr) public view returns(uint256[] memory) {
+        return songs[addr];
     }
 }
