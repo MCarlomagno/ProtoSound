@@ -1,40 +1,22 @@
 import { Container, Alert, Tabs } from '@mantine/core';
 import { IconAlertCircle, IconBucket, IconSeeding } from '@tabler/icons';
-import { BigNumber } from 'ethers';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useMetamask } from '../../hooks/useMetamask';
-import { useProtosoundContract } from '../../hooks/useProtosoundContract';
 import { ProfileHeader } from './ProfileHeader/ProfileHeader';
 import { UserCollected } from './UserCollected/UserCollected';
 import { UserReleases } from './UserReleases/UserReleases';
 
 function Feed() {
-  const [address, setAddress] = useState<string>();
-
-  const { getAccounts, accounts } = useMetamask();
-  const { protosound } = useProtosoundContract();
+  const { accounts, getAccounts } = useMetamask();
 
   useEffect(() => {
-    getAccounts().then(async (acc) => {
-      if (acc[0] && protosound) {
-        const addr = acc[0];
-        setAddress(addr);
-        const songs = await protosound.functions.getSongs(addr);
-        console.log(songs[0]);
-        const parsedIds = songs[0].map(Number);
-        console.log(parsedIds);
-        for(let id of parsedIds) {
-          const song = await protosound.functions.songMetadata(id);
-          console.log(song);
-        }
-      }
-    });
-  }, [protosound]);
+    getAccounts();
+  }, []);
 
   return (
     <Container>
-      {address ? <>
-        <ProfileHeader address={address}/>
+      {accounts[0] ? <>
+        <ProfileHeader address={accounts[0]}/>
         <Tabs defaultValue={'collected'}>
           <Tabs.List>
             <Tabs.Tab value="created" icon={<IconSeeding size={14} />}>Created</Tabs.Tab>

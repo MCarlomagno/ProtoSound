@@ -12,11 +12,7 @@ declare global {
   }
 }
 
-interface ProviderRpcError extends Error {
-  message: string;
-  code: number;
-  data?: unknown;
-}
+const NETWORK = 80001;
 
 function useMetamask() {
   const [provider, setProvider] = useState<Web3Provider | null>(null);
@@ -35,12 +31,11 @@ function useMetamask() {
       setAccounts(acc);
     });
 
-    window.ethereum.on('networkChanged', (net: Network) => {
-      setNetwork(net);
-    });
-
-    window.ethereum.on('disconnect', (error: ProviderRpcError) => {
-      console.log('disconnected');
+    window.ethereum.on('chainChanged', (net: any) => {
+      setNetwork({ 
+        chainId: Number(net), 
+        name: Number(net) === NETWORK ? 'Mumbai' : 'Invalid Network'
+      });
     });
 
     return newProvider
@@ -63,6 +58,13 @@ function useMetamask() {
     return accounts;
   }
 
+  const getNetwork = async () => {
+    const provider = setupProvider();
+    const network: Network = await provider.getNetwork();
+    setNetwork(network);
+    return network;
+  }
+
   const sendTransaction = async (from: string, to: string, valueInEther: string) =>  {
     const provider = setupProvider();
     const params = [{
@@ -80,6 +82,7 @@ function useMetamask() {
     network,
     connect,
     getAccounts,
+    getNetwork,
     sendTransaction
   }
 }

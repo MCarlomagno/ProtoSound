@@ -1,12 +1,12 @@
 import { ActionIcon, Avatar, Image, Button, Container, createStyles, Group, Header, Indicator, Text, Badge, Tooltip } from "@mantine/core"
 import { IconWorld, IconUser } from '@tabler/icons';
-import { useCallback, useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import SwitchThemeToggle from "../SwitchThemeToggle/SwitchThemeToggle";
 import logo from '../../assets/logo.svg';
 import { useMediaQuery } from '@mantine/hooks';
 import { useMetamask } from "../../hooks/useMetamask";
 import { formatAddress } from "../../utils/stringUtils";
+import { useEffect } from "react";
 
 
 const useStyles = createStyles((theme) => ({
@@ -25,27 +25,15 @@ const useStyles = createStyles((theme) => ({
 
 function AppHeader() {
   const { classes } = useStyles();
-  const { connect, accounts, getAccounts, network } = useMetamask();
-  const [address, setAddress] = useState('');
-  const matches = useMediaQuery('(max-width: 600px)');
-
-  const validNetwork = network?.chainId === 80001;
+  const { connect, accounts, network, getAccounts, getNetwork } = useMetamask();
 
   useEffect(() => {
-    getAccounts().then((acc) => {
-      if (acc[0]) {
-        setAddress(acc[0]);
-      }
-    });
-  }, [accounts]);
-
-  const connectWallet = useCallback(async () => {
-    await connect();
-    const acc = await getAccounts();
-    if (acc[0]) {
-      setAddress(acc[0]);
-    }
-  }, [accounts]);
+    getAccounts().then(() => getNetwork());
+  }, [])
+  
+  
+  const matches = useMediaQuery('(max-width: 600px)');
+  const validNetwork = network?.chainId === 80001;
 
   return (
     <Header height={matches ? 120 : 60} style={{minHeight: matches ? 120 : 60}} p="lg">
@@ -62,7 +50,7 @@ function AppHeader() {
           </ActionIcon>
         </Group>
         <Group >
-        {address && network
+        {accounts[0]
           ? <>
               <Tooltip label={
                 validNetwork 
@@ -73,12 +61,12 @@ function AppHeader() {
                   {validNetwork ? 'Polygon Mumbai' : 'Invalid Network'}
                 </Badge>
               </Tooltip>
-              <Text>{formatAddress(address)}</Text>
-              <Avatar src={`https://avatars.dicebear.com/api/identicon/${address}.svg`} />
+              <Text>{formatAddress(accounts[0])}</Text>
+              <Avatar src={`https://avatars.dicebear.com/api/identicon/${accounts[0]}.svg`} />
             </>  
           : <> 
               <Indicator inline dot processing size={12} color={'yellow'}>
-                <Button onClick={connectWallet}>
+                <Button onClick={connect}>
                   Connect
                 </Button>
               </Indicator>

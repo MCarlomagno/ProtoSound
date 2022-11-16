@@ -1,6 +1,8 @@
 import { Text, SimpleGrid, Paper, createStyles, Badge, Group, Stack, Modal, Image, Center, Card } from '@mantine/core';
-import { useState } from 'react';
-import mockdata from '../../../mockdata.json';
+import { useEffect, useState } from 'react';
+import { GridLoader } from '../../../components/GridLoader/GridLoader';
+import { useMetamask } from '../../../hooks/useMetamask';
+import { useProtosoundContract } from '../../../hooks/useProtosoundContract';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -61,9 +63,10 @@ interface ReleaseProps {
   audio: string,
   image: string,
   price: number
+  covers: string[]
 }
 
-function Release({ name, author, audio, image, price }: ReleaseProps) {
+function Release({ name, author, audio, image, price, covers }: ReleaseProps) {
   const { classes } = useStyles();
   const [opened, setOpened] = useState(false);
 
@@ -104,10 +107,6 @@ function Release({ name, author, audio, image, price }: ReleaseProps) {
         <Center>
           <audio className={classes.audio} src={audio} controls />
         </Center>
-        <Card p={20} my={10} withBorder={true} style={{background: '#56da565e'}}>
-          Total Revenue
-          <Text weight={800} color="green">200 Matic</Text>
-        </Card>
         <Card withBorder={true}>
           Collection
           <SimpleGrid
@@ -115,7 +114,7 @@ function Release({ name, author, audio, image, price }: ReleaseProps) {
             style={{maxHeight: 200, overflowY: 'scroll'}}
             mt="md"
             breakpoints={[{ maxWidth: 'sm', cols: 2 }]}>
-            {mockdata.map((item, i) => (<Image key={i} src={item.image} radius="sm"></Image>))}
+            {covers.map((item, i) => (<Image key={i} src={item} radius="sm"></Image>))}
           </SimpleGrid>
         </Card>
 
@@ -126,12 +125,48 @@ function Release({ name, author, audio, image, price }: ReleaseProps) {
 
 
 export function UserReleases() {
+  const { accounts, getAccounts } = useMetamask();
+  const { protosound } = useProtosoundContract();
+  const [loading, setLoading] = useState(false);
+  const [releases, setReleases] = useState<ReleaseProps[]>([])
+
+  useEffect(() => {
+    getAccounts();
+  }, []);
+
+  useEffect(() => {
+    if (accounts[0] && protosound && !loading) {
+      setLoading(true);
+      const addr = accounts[0];
+      protosound.functions.getSongs(addr).then(async (songs) => {
+        const songIds = songs[0].map(Number);
+        for(let id of songIds) {
+          const [song] = await protosound.functions.getSongMetadata(id);
+          const release: ReleaseProps = {
+            name: song.name,
+            audio: song.audioUri,
+            author: addr,
+            image: song.authorCoverUri,
+            price: Number(song.price),
+            covers: song.tokenUris
+          }
+          setReleases((r) => ([...r, release]));
+        }
+        setLoading(false);
+      });
+    }
+  }, [accounts, protosound]);
+
+  if (loading) {
+    return (<GridLoader/>)
+  }
+  
   return (
     <SimpleGrid
       cols={3}
       mt="md"
       breakpoints={[{ maxWidth: 'sm', cols: 1 }, { maxWidth: 'md', cols: 2 }]}>
-      {mockdata.map((item, i) => (<Release key={i} {...item} />))}
+      {releases.map((item, i) => (<Release key={i} {...item} />))}
     </SimpleGrid>
   )
 }

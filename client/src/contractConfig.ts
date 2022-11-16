@@ -36,6 +36,67 @@ export const abi = [
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "songId",
+				"type": "uint256"
+			}
+		],
+		"name": "getSongMetadata",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "authorCoverTokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "authorAudioTokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "coverCollectionId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "authorCoverUri",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "audioUri",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "tokenUris",
+						"type": "string[]"
+					}
+				],
+				"internalType": "struct ProtoSound.SongMetadata",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "addr",
 				"type": "address"
@@ -178,6 +239,16 @@ export const abi = [
 				"internalType": "uint256",
 				"name": "coverCollectionId",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "authorCoverUri",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "audioUri",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -197,25 +268,6 @@ export const abi = [
 			}
 		],
 		"name": "songs",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "addr",
-				"type": "address"
-			}
-		],
-		"name": "songsAmount",
 		"outputs": [
 			{
 				"internalType": "uint256",
