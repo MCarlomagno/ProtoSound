@@ -2,39 +2,33 @@ import * as IPFS from 'ipfs';
 import { useCallback, useEffect, useState } from 'react';
 import { IPFSNode } from '../IPFS';
 import { FileMetadata } from '../types/FileMetadata';
+import all from 'it-all';
 
 export function useIPFS() {
-  const [ready, setReady] = useState<boolean>();
   const [ipfs, setIpfs] = useState<IPFS.IPFS>();
 
   useEffect(() => {
-    setReady(false);
     IPFSNode.getInstance()
       .then((instance) => {
         if (instance && instance.node) {
           setIpfs(instance.node);
-          setReady(true);
         }
       });
   }, []);
 
   const uploadSingleFile = async (file: File) => {
     if (!ipfs) return;
-    const chunks = [];
-    const result = ipfs.addAll(file.stream(), {
+    const result = await all(ipfs.addAll(file.stream(), {
       preload: true,
-    });
-    for await (const chunk of result) {
-      chunks.push(chunk);
-    }
-    return chunks;
+    }));
+    return result;
   }
 
   const uploadFiles = useCallback(async (
-    files: FileList,
+    files: File[],
     progress = (p: number) => {}
   ) : Promise<FileMetadata[]> => {
-    if (!ipfs || !ready) throw Error('IPFS not ready');
+    if (!ipfs) throw Error('IPFS not ready');
 
     const metadata: FileMetadata[] = [];
     for (let f of files) {
@@ -53,7 +47,7 @@ export function useIPFS() {
       }
     }
     return metadata;
-  }, [ipfs, ready] );
+  }, [ipfs] );
 
-  return {ipfs, ready, uploadFiles };
+  return {ipfs, uploadFiles };
 }

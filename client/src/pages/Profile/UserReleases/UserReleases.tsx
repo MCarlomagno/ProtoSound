@@ -117,7 +117,6 @@ function Release({ name, author, audio, image, price, covers }: ReleaseProps) {
             {covers.map((item, i) => (<Image key={i} src={item} radius="sm"></Image>))}
           </SimpleGrid>
         </Card>
-
       </Modal>
     </Paper>
   );
