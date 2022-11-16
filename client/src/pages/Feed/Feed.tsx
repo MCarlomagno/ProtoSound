@@ -1,5 +1,7 @@
-import { SimpleGrid, Title, Text, Card, Image, Center, Container, createStyles, Group, Badge, Button } from '@mantine/core';
+import { SimpleGrid, Title, Text, Card, Image, Center, Container, createStyles, Group, Badge, Button, Overlay, Box, Modal } from '@mantine/core';
 import { IconCurrencyDollar, IconZoomMoney } from '@tabler/icons';
+import { useState } from 'react';
+import { WIPAlert } from '../../components/WIPAlert/WIPAlert';
 
 import mockdata from '../../mockdata.json';
 
@@ -24,6 +26,7 @@ const useStyles = createStyles((theme) => ({
 function Feed() {
 
   const { classes } = useStyles();
+  const [open, setOpen] = useState(true);
 
   const items = mockdata.map((item) => (
     <Card withBorder radius="md" p="md" key={item.name}>
@@ -58,16 +61,18 @@ function Feed() {
   ));
 
   return (
-    <Container>
-      <Title px={'lg'} order={2}>Feed</Title>
-      <Text px={'lg'} color={'dimmed'}>Select your favorite song, purchase, listen and mint your own NFT</Text>
-      <SimpleGrid
-        cols={3}
-        mt="md" 
-        breakpoints={[{ maxWidth: 'sm', cols: 1 }, { maxWidth: 'md', cols: 2 }]}>
-        {items}
-      </SimpleGrid>
-    </Container>
+      <Container>
+        <WIPAlert/>
+        <Overlay blur={2} style={{top: 200}} zIndex={2} opacity={0}/>
+        <Title px={'lg'} order={2}>Feed</Title>
+        <Text px={'lg'} color={'dimmed'}>Select your favorite song, purchase, listen and mint your own NFT</Text>
+        <SimpleGrid
+          cols={3}
+          mt="md" 
+          breakpoints={[{ maxWidth: 'sm', cols: 1 }, { maxWidth: 'md', cols: 2 }]}>
+          {items}
+        </SimpleGrid>
+      </Container>
   )
 }
 

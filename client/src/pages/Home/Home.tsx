@@ -14,13 +14,13 @@ function Home() {
           image={backgroundImages.createMintEarn}
           title='Create, Mint & Earn'
           description='Release your song with personal song cover and a collection of album covers to engage with your fans.'
-          buttonProps={{ icon: 'create', label: 'Create new release' }}
+          buttonProps={{ icon: 'create', label: 'Create new release', route: 'profile' }}
         ></CardBackground>
         <CardBackground 
           image={backgroundImages.supportListenCollect}
           title='Support, Listen & Collect'
           description='Browse the artists latest relases, find the music that you love and get your own NFTs.'
-          buttonProps={{ icon: 'browse', label: 'Browse latest releases' }}
+          buttonProps={{ icon: 'browse', label: 'Browse latest releases', route: 'feed' }}
         ></CardBackground>
       </SimpleGrid>
     </Container>

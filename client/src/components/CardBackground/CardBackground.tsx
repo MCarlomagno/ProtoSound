@@ -1,5 +1,6 @@
 import { createStyles, Paper, Text, Title, Button } from '@mantine/core';
 import { IconDisc, IconWorld } from '@tabler/icons';
+import { Link, Navigate } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
 
@@ -41,6 +42,7 @@ const useStyles = createStyles((theme) => ({
 interface ButtonProps {
   label: string;
   icon: 'browse' | 'create';
+  route: 'feed' | 'profile'
 }
 
 interface ArticleCardImageProps {
@@ -69,9 +71,12 @@ export function CardBackground({ image, title, description, buttonProps }: Artic
             {description}
           </Text>
         </div>
-        <Button className={classes.button} variant={'white'} leftIcon={buttonProps.icon === 'browse' ? <IconWorld /> : <IconDisc />}>
-          {buttonProps.label}
-        </Button>
+        <Link to={buttonProps.route} replace={true}>
+          <Button className={classes.button} variant={'white'} leftIcon={buttonProps.icon === 'browse' ? <IconWorld /> : <IconDisc />}>
+            {buttonProps.label}
+          </Button>
+        </Link>
+
     </Paper>
   );
 }

@@ -17,7 +17,7 @@ function Feed() {
     <Container>
       {accounts[0] ? <>
         <ProfileHeader address={accounts[0]}/>
-        <Tabs defaultValue={'collected'}>
+        <Tabs defaultValue={'created'}>
           <Tabs.List>
             <Tabs.Tab value="created" icon={<IconSeeding size={14} />}>Created</Tabs.Tab>
             <Tabs.Tab value="collected" icon={<IconBucket size={14} />}>Collected</Tabs.Tab>

@@ -1,4 +1,6 @@
-import { Card, Image, Text, Center, SimpleGrid, createStyles, Badge, Paper, Group } from '@mantine/core';
+import { Card, Image, Text, Center, SimpleGrid, createStyles, Badge, Paper, Group, Overlay, Modal, Box } from '@mantine/core';
+import { useState } from 'react';
+import { WIPAlert } from '../../../components/WIPAlert/WIPAlert';
 import mockdata from '../../../mockdata.json';
 
 const useStyles = createStyles((theme) => ({
@@ -28,6 +30,7 @@ const useStyles = createStyles((theme) => ({
 export function UserCollected() {
 
   const { classes } = useStyles();
+  const [open, setOpen] = useState(true);
 
   const items = mockdata.map((item) => (
     <Card withBorder radius="md" p="md" key={item.name}>
@@ -54,11 +57,17 @@ export function UserCollected() {
   ));
 
   return (
-    <SimpleGrid
+    <Box>
+      <WIPAlert />
+        <Overlay blur={2} style={{top: 320}} zIndex={2} opacity={0}/>
+        <SimpleGrid
       cols={3}
       mt="md"
       breakpoints={[{ maxWidth: 'sm', cols: 1 }, { maxWidth: 'md', cols: 2 }]}>
       {items}
     </SimpleGrid>
+
+    </Box>
+
   )
 }
