@@ -87,7 +87,7 @@ function Release({ name, author, audio, image, price, covers }: ReleaseProps) {
   const [opened, setOpened] = useState(false);
 
   const collection = covers.map((item, i) => (
-    <div style={{position: 'relative'}}>
+    <div key={i} style={{position: 'relative'}}>
       <Image src={item} alt={name} height={200} radius={'lg'} /> 
       <Badge style={{position: 'absolute', top: '15px', right: '20px'}}>NFT</Badge> 
     </div>
@@ -199,7 +199,7 @@ export function UserReleases() {
       breakpoints={[{ maxWidth: 'sm', cols: 1 }, { maxWidth: 'md', cols: 2 }]}>
       {releases.length > 0 ?
         releases.map((item, i) => (<Release key={i} {...item} />)) :
-        <Release {...exampleRelease} />}
+        <Release key={1} {...exampleRelease} />}
     </SimpleGrid>
   )
 }

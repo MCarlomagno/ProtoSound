@@ -1,4 +1,4 @@
-import { Text, Avatar, Group, Notification, TextInput, Button, Modal, FileInput, LoadingOverlay, Loader, Image } from '@mantine/core';
+import { Text, Avatar, Group, Notification, TextInput, Button, Modal, FileInput, LoadingOverlay, Loader, Image, Alert } from '@mantine/core';
 import { IconCurrencyDollar, IconMusic, IconUpload } from '@tabler/icons';
 import { useCallback, useEffect, useState } from 'react';
 import { useIPFS } from '../../../hooks/useIPFS';
@@ -14,6 +14,7 @@ export function ProfileHeader({ address }: ProfileHeaderProps) {
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [minting, setMinting] = useState(false);
+  const [error, setError] = useState('');
   const { ipfs, uploadFiles } = useIPFS();
   const { signer, connect } = useMetamask();
   const { protosound, sign } = useProtosoundContract(); 
@@ -35,12 +36,15 @@ export function ProfileHeader({ address }: ProfileHeaderProps) {
 
   const submit = useCallback(async () => {
     if (!protosound || !ipfs || !signer) return console.log('Loading resources!');
+
+    if (error) setError('');
     if (!cover || 
         !audio ||
         !collection ||
         !name ||
-        !price
-    ) return console.log('complete all the fields!');
+        !price) {
+      return setError('Must complete all the fields')
+    };
 
     setUploading(true);
     setCoverLoading(true);
@@ -144,6 +148,7 @@ export function ProfileHeader({ address }: ProfileHeaderProps) {
             onChange={setCollection}
             icon={<IconUpload size={14}></IconUpload>} />
           <Group m={10} style={{justifyContent:'right'}}>
+            { error && <Alert color="red">{error}</Alert> }
             { uploading && <Loader size={'xs'} />}
             <Button 
               disabled={!ipfs || !protosound || uploading}
