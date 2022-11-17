@@ -18,7 +18,8 @@ describe('AppHeader', () => {
       getAccounts: jest.fn().mockReturnValue(new Promise(() => {})),
       network: null,
       sendTransaction: jest.fn(),
-      signer: null
+      signer: null,
+      getNetwork: jest.fn()
     }));
     render(
       <ColorSchemeProvider colorScheme='light' toggleColorScheme={()=> {}}>

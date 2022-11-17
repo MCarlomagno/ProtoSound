@@ -66,6 +66,22 @@ interface ReleaseProps {
   covers: string[]
 }
 
+const exampleRelease = {
+  name: 'Example song',
+  author: 'Marcos Carlomagno, Luis Lopez, Agustín Longoni',
+  audio: 'https://file-examples.com/storage/fe04183d33637128a9c93a7/2017/11/file_example_MP3_1MG.mp3',
+  image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+  price: 20,
+  covers: [
+    'https://images.unsplash.com/photo-1461784180009-21121b2f204c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+    'https://images.unsplash.com/photo-1542628682-88321d2a4828?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+    'https://images.unsplash.com/photo-1526979118433-63c7344f06f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+    'https://images.unsplash.com/photo-1513866942102-cfdd82745c6a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1841&q=80',
+    'https://images.unsplash.com/photo-1651065700017-a741fc4a7f26?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzR8fERKfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60',
+    'https://images.unsplash.com/photo-1577930595497-05902654453e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80'
+  ]
+};
+
 function Release({ name, author, audio, image, price, covers }: ReleaseProps) {
   const { classes } = useStyles();
   const [opened, setOpened] = useState(false);
@@ -154,6 +170,7 @@ export function UserReleases() {
       const addr = accounts[0];
       protosound.functions.getSongs(addr).then(async (songs) => {
         const songIds = songs[0].map(Number);
+        console.log(songIds);
         for(let id of songIds) {
           const [song] = await protosound.functions.getSongMetadata(id);
           const release: ReleaseProps = {
@@ -180,7 +197,9 @@ export function UserReleases() {
       cols={3}
       mt="md"
       breakpoints={[{ maxWidth: 'sm', cols: 1 }, { maxWidth: 'md', cols: 2 }]}>
-      {releases.map((item, i) => (<Release key={i} {...item} />))}
+      {releases.length > 0 ?
+        releases.map((item, i) => (<Release key={i} {...item} />)) :
+        <Release {...exampleRelease} />}
     </SimpleGrid>
   )
 }

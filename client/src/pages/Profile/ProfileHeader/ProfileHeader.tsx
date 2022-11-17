@@ -5,14 +5,12 @@ import { useIPFS } from '../../../hooks/useIPFS';
 import { useMetamask } from '../../../hooks/useMetamask';
 import { useProtosoundContract } from '../../../hooks/useProtosoundContract';
 import songReleaseImage from '../../../assets/release.png';
-import { useElementSize } from '@mantine/hooks';
 
 interface ProfileHeaderProps {
   address: string;
 }
 
 export function ProfileHeader({ address }: ProfileHeaderProps) {
-  const { ref, width, height } = useElementSize();
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [minting, setMinting] = useState(false);

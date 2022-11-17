@@ -49,5 +49,5 @@ export function useIPFS() {
     return metadata;
   }, [ipfs] );
 
-  return {ipfs, uploadFiles };
+  return { ipfs, uploadFiles };
 }
