@@ -19,7 +19,7 @@ function App() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        <Router basename='ProtoSound'>
+        <Router>
           <AppShell
             navbarOffsetBreakpoint="sm"
             asideOffsetBreakpoint="sm"
