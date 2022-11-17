@@ -48,48 +48,8 @@ describe("ProtoSound", function () {
     songAuthorCover = SongAuthorCover.attach(songAuthorCoverAddress);
   });
 
-  it('Should create users', async () => {
-    const [acc1, acc2, acc3] = await ethers.getSigners();
-    const tx: ContractTransaction = await protoSound.create(acc1.address, "testNick");
-    await tx.wait();
-
-    // queries the user by address of the last created one.
-    const [nick, active] = await protoSound.userByAddress(acc1.address);
-    expect(active).to.be.true;
-    expect(nick).to.be.equal("testNick");
-  });
-
-  it('Should update users', async () => {
-    const [acc1, acc2, acc3] = await ethers.getSigners();
-
-    // first, creates the user
-    const tx: ContractTransaction = await protoSound.create(acc1.address, "testNick");
-    await tx.wait();
-
-    // then, cahnges the user nick
-    const tx2: ContractTransaction = await protoSound.changeNick(acc1.address, "changed");
-    await tx2.wait();
-
-    // Checks that nick has changed
-    const [nick, active] = await protoSound.userByAddress(acc1.address);
-    expect(active).to.be.true;
-    expect(nick).to.be.equal("changed");
-  });
-
-  it('Should throw when user not registered tries to mint a song', async () => {
-    const [acc1, acc2, acc3] = await ethers.getSigners();
-    
-    const tx: Promise<ContractTransaction> = protoSound
-      .mintSong(1, songName, authorCoverUri, audioUri, tokenUris);
-    await expect(tx).to.be.rejectedWith('User not found');
-  });
-
   it('Should mint SongCover, SongAuthorCover and SongAudio tokens', async () => {
     const [acc1, acc2, acc3] = await ethers.getSigners();
-
-    // creates the new user
-    const tx2: ContractTransaction = await protoSound.create(acc2.address, "testNick");
-    await tx2.wait();
 
     // acc2 connects and approves ProtoSound to manage its tokens.
     protoSound = protoSound.connect(acc2);
@@ -119,12 +79,6 @@ describe("ProtoSound", function () {
     
     // 0.001 eth
     const price = 1000000000000000;
-
-    // creates the new user
-    const tx: ContractTransaction = await protoSound.create(acc2.address, "testNick");
-    await tx.wait();
-    const tx2: ContractTransaction = await protoSound.create(acc3.address, "testNick1");
-    await tx2.wait();
 
     // acc2 connects and approves ProtoSound to manage its SongCover tokens.
     songCover = songCover.connect(acc2);
