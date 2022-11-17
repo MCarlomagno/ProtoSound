@@ -1,3 +1,4 @@
+import { JsonRpcSigner } from "@ethersproject/providers";
 import { ethers } from "ethers";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { address, abi, provider } from '../contractConfig';
@@ -13,12 +14,12 @@ export function useProtosoundContract() {
     });
   }, []);
 
-  const sign = useCallback(async (signer: ethers.Signer) => {
+  const sign = useCallback(async (signer: JsonRpcSigner) => {
     if (protosound) {
-      const contract = protosound.current.connect(signer);
-      setProtosound(contract);
+      const contract = protosound.connect(signer);
+      return contract;
     }
   }, [protosound]);
 
-  return { protosound };
+  return { protosound, sign };
 }
