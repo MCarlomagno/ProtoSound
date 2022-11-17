@@ -1,15 +1,18 @@
-import { Text, Avatar, Group, Notification, TextInput, Button, Modal, FileInput, LoadingOverlay, Loader } from '@mantine/core';
+import { Text, Avatar, Group, Notification, TextInput, Button, Modal, FileInput, LoadingOverlay, Loader, Image } from '@mantine/core';
 import { IconCurrencyDollar, IconMusic, IconUpload } from '@tabler/icons';
 import { useCallback, useEffect, useState } from 'react';
 import { useIPFS } from '../../../hooks/useIPFS';
 import { useMetamask } from '../../../hooks/useMetamask';
 import { useProtosoundContract } from '../../../hooks/useProtosoundContract';
+import songReleaseImage from '../../../assets/release.png';
+import { useElementSize } from '@mantine/hooks';
 
 interface ProfileHeaderProps {
   address: string;
 }
 
 export function ProfileHeader({ address }: ProfileHeaderProps) {
+  const { ref, width, height } = useElementSize();
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [minting, setMinting] = useState(false);
@@ -89,67 +92,69 @@ export function ProfileHeader({ address }: ProfileHeaderProps) {
     <Modal 
       opened={open} 
       onClose={() => setOpen(false)} 
-      title="Release a new Song">
-      <div >
-        <LoadingOverlay visible={!ipfs} overlayBlur={2} />
-        <TextInput
-        m={10}
-        placeholder="Song name"
-        label="Song name"
-        withAsterisk
-        onChange={(e) => setName(e.target.value)}
-      />
-      <TextInput
-        m={10}
-        placeholder="Song price"
-        label="Song price"
-        description="The cost (in Matic) that your fans will pay for your song and minting one of the generated NFTs"
-        withAsterisk
-        icon={<IconCurrencyDollar size={14}/>}
-        type={'number'}
-        onChange={(e) => setPrice(Number(e.target.value))}
-      />
-      <FileInput 
-        m={10}
-        label="Soulbound cover (image)"
-        placeholder="Soulbound cover (image)"
-        withAsterisk
-        description="The image Soulbound token, it is a visual representation of your song"
-        accept="image/png,image/jpeg"
-        rightSection={coverLoading && <Loader size="xs" />}
-        onChange={setCover}
-        icon={<IconUpload size={14}></IconUpload>} />
-      <FileInput 
-        m={10}
-        label="Soulbound song (audio)"
-        placeholder="Soulbound song (audio)"
-        withAsterisk
-        description="The audio Soulbound token, and its your actual song, it will belong to you forever since you are the author"
-        accept=".mp3,audio/*"
-        rightSection={audioLoading && <Loader size="xs" />}
-        onChange={setAudio}
-        icon={<IconUpload size={14}></IconUpload>} />
-      <FileInput 
-        m={10}
-        label="NFT collection (images)"
-        placeholder="Soulbound song (images)"
-        withAsterisk
-        description="The NFT collection that will be minted and for sell, when your fans buy your song, they also will receive one token from the collection randomly"
-        multiple
-        accept="image/png,image/jpeg"
-        rightSection={collectionLoading && <Loader size="xs" />}
-        onChange={setCollection}
-        icon={<IconUpload size={14}></IconUpload>} />
-      <Group m={10} style={{justifyContent:'right'}}>
-        { uploading && <Loader size={'xs'} />}
-        <Button 
-          disabled={!ipfs || !protosound || uploading}
-          leftIcon={<IconMusic></IconMusic>}
-          onClick={() => submit()}>
-          Release
-        </Button>
-      </Group>
-      </div>
+      title="Release a new Song"
+      size={'md'}>
+          <Image src={songReleaseImage} alt={'song release'} height={150} fit={'cover'} radius={'lg'} /> 
+          <div >
+            <LoadingOverlay visible={!ipfs} overlayBlur={2} />
+            <TextInput
+            m={10}
+            placeholder="Song name"
+            label="Song name"
+            withAsterisk
+            onChange={(e) => setName(e.target.value)}
+          />
+          <TextInput
+            m={10}
+            placeholder="Song price"
+            label="Song price"
+            description="The cost (in Matic) that your fans will pay for your song and minting one of the generated NFTs"
+            withAsterisk
+            icon={<IconCurrencyDollar size={14}/>}
+            type={'number'}
+            onChange={(e) => setPrice(Number(e.target.value))}
+          />
+          <FileInput 
+            m={10}
+            label="Soulbound cover (image)"
+            placeholder="Soulbound cover (image)"
+            withAsterisk
+            description="The image Soulbound token, it is a visual representation of your song"
+            accept="image/png,image/jpeg"
+            rightSection={coverLoading && <Loader size="xs" />}
+            onChange={setCover}
+            icon={<IconUpload size={14}></IconUpload>} />
+          <FileInput 
+            m={10}
+            label="Soulbound song (audio)"
+            placeholder="Soulbound song (audio)"
+            withAsterisk
+            description="The audio Soulbound token, and its your actual song, it will belong to you forever since you are the author"
+            accept=".mp3,audio/*"
+            rightSection={audioLoading && <Loader size="xs" />}
+            onChange={setAudio}
+            icon={<IconUpload size={14}></IconUpload>} />
+          <FileInput 
+            m={10}
+            label="NFT collection (images)"
+            placeholder="Soulbound song (images)"
+            withAsterisk
+            description="The NFT collection that will be minted and for sell, when your fans buy your song, they also will receive one token from the collection randomly"
+            multiple
+            accept="image/png,image/jpeg"
+            rightSection={collectionLoading && <Loader size="xs" />}
+            onChange={setCollection}
+            icon={<IconUpload size={14}></IconUpload>} />
+          <Group m={10} style={{justifyContent:'right'}}>
+            { uploading && <Loader size={'xs'} />}
+            <Button 
+              disabled={!ipfs || !protosound || uploading}
+              leftIcon={<IconMusic></IconMusic>}
+              onClick={() => submit()}>
+              Release
+            </Button>
+          </Group>
+        </div>
     </Modal>
 
     {uploading && <Notification loading disallowClose title={minting ? "Minting tokens" : "Uploading Files"}>

@@ -1,4 +1,4 @@
-import { Text, SimpleGrid, Paper, createStyles, Badge, Group, Stack, Modal, Image, Center, Card } from '@mantine/core';
+import { Text, SimpleGrid, Paper, createStyles, Badge, Group, Stack, Modal, Image, Center, Card, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { GridLoader } from '../../../components/GridLoader/GridLoader';
 import { useMetamask } from '../../../hooks/useMetamask';
@@ -70,6 +70,14 @@ function Release({ name, author, audio, image, price, covers }: ReleaseProps) {
   const { classes } = useStyles();
   const [opened, setOpened] = useState(false);
 
+  const collection = covers.map((item, i) => (
+    <div style={{position: 'relative'}}>
+      <Image src={item} alt={name} height={200} radius={'lg'} /> 
+      <Badge style={{position: 'absolute', top: '15px', right: '20px'}}>NFT</Badge> 
+    </div>
+  ));    
+   
+
   return (
     <Paper
       key={name}
@@ -97,24 +105,31 @@ function Release({ name, author, audio, image, price, covers }: ReleaseProps) {
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title={name}
+        title={<Title order={3}>{name}</Title>}
+        size={'xl'}
       >
-        <Image src={image} alt={name} height={200} radius={'lg'} />
-        <Group m={10} style={{ justifyContent: 'space-between'}}>
-          {name}
+        <div style={{position: 'relative'}}>
+          <Image src={image} alt={name} height={200} radius={'lg'} /> 
+          <Badge style={{position: 'absolute', top: '15px', right: '20px'}}>Soulbound</Badge> 
+        </div>
+        <Card>
+          <Center>
+          <Badge style={{minWidth: '100px'}}>Soulbound</Badge> 
+            <audio className={classes.audio} src={audio} controls />
+          </Center>
+        </Card>
+
+        <Card withBorder={true}>
+          <Group m={10} style={{ justifyContent: 'space-between'}}>
+          <Title order={4}>NFT Collection</Title>
           <Badge color={'green'}>Price: {price} Matic</Badge>
         </Group>
-        <Center>
-          <audio className={classes.audio} src={audio} controls />
-        </Center>
-        <Card withBorder={true}>
-          Collection
           <SimpleGrid
             cols={3}
             style={{maxHeight: 200, overflowY: 'scroll'}}
             mt="md"
             breakpoints={[{ maxWidth: 'sm', cols: 2 }]}>
-            {covers.map((item, i) => (<Image key={i} src={item} radius="sm"></Image>))}
+            {collection}
           </SimpleGrid>
         </Card>
       </Modal>
