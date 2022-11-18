@@ -188,7 +188,7 @@ export function UserReleases() {
     }
   }, [accounts, protosound]);
 
-  if (loading) {
+  if (!protosound || loading) {
     return (<GridLoader/>)
   }
   
