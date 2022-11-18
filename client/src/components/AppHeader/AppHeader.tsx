@@ -36,7 +36,7 @@ function AppHeader() {
   const validNetwork = network?.chainId === 80001;
 
   return (
-    <Header height={matches ? 120 : 60} style={{minHeight: matches ? 120 : 60}} p="lg">
+    <Header height={matches ? 160 : 60} style={{minHeight: matches ? 120 : 60}} p="lg">
       <Container className={ matches ? classes.headerMobile : classes.header}>
         <Group>
           <Link to="/">

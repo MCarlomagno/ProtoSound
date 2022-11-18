@@ -73,13 +73,15 @@ export function Header() {
               Protosound, a web3 approach to the music industry
             </Title>
             <Text color="dimmed" mt="md">
-              This app was built with ❤️ for the <a href={'https://chain.link/hackathon'}>Chainlink fall 2022 hackathon</a> by:
+              This app was built with ❤️ for the <a href={'https://chain.link/hackathon'}>Chainlink fall 2022 hackathon</a>.
             </Text>
 
             <Group mt={30}>
-              <Button radius="xl" size="md" className={classes.control} leftIcon={<IconBrandGithub />}>
-                Source Code
-              </Button>
+              <a href='https://github.com/MCarlomagno/ProtoSound' target={'_blank'}>
+                <Button radius="xl" size="md" className={classes.control} leftIcon={<IconBrandGithub />}>
+                  Source Code
+                </Button>
+              </a>
             </Group>
           </div>
           <Image radius={'lg'} src={header} height={400} className={classes.image} />

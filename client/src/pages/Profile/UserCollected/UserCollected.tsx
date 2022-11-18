@@ -1,4 +1,5 @@
 import { Card, Image, Text, Center, SimpleGrid, createStyles, Badge, Paper, Group, Overlay, Modal, Box } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
 import { WIPAlert } from '../../../components/WIPAlert/WIPAlert';
 import mockdata from '../../../mockdata.json';
@@ -31,6 +32,7 @@ export function UserCollected() {
 
   const { classes } = useStyles();
   const [open, setOpen] = useState(true);
+  const isMobile = useMediaQuery('(max-width: 600px)');
 
   const items = mockdata.map((item) => (
     <Card withBorder radius="md" p="md" key={item.name}>
@@ -59,7 +61,7 @@ export function UserCollected() {
   return (
     <Box>
       <WIPAlert />
-        <Overlay blur={2} style={{top: 320}} zIndex={2} opacity={0}/>
+        <Overlay blur={2} style={{top: isMobile ? 580 : 320, height: isMobile ? '150vh' : '100vh'}} zIndex={2} opacity={0}/>
         <SimpleGrid
       cols={3}
       mt="md"
