@@ -1,5 +1,6 @@
 import { Container, SimpleGrid } from '@mantine/core';
 import { CardBackground } from '../../components/CardBackground/CardBackground';
+import { Header } from './Header';
 
 const backgroundImages = {
   createMintEarn: "https://images.unsplash.com/photo-1588638874655-9ff1b9c6668b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&fit=crop&w=1470&q=80",
@@ -9,6 +10,7 @@ const backgroundImages = {
 function Home() {
   return (
     <Container>
+      <Header />
       <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'xs', cols: 1 }]}>
         <CardBackground 
           image={backgroundImages.createMintEarn}
